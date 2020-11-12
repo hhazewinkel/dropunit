@@ -3,7 +3,7 @@
 
     <groupId>net.lisanza.dropunit</groupId>
     <artifactId>dropunit-parent</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3-SNAPSHOT</version>
 
     <packaging>pom</packaging>
     <name>DropUnit parent</name>
@@ -17,7 +17,7 @@
         <connection>scm:git:git@github.com:hhazewinkel/dropunit.git</connection>
         <developerConnection>scm:git:git@github.com:hhazewinkel/dropunit.git</developerConnection>
         <url>https://github.com/hhazewinkel/dropunit</url>
-        <tag>dropunit-1.2.2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <modules>
