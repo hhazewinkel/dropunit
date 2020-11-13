@@ -37,13 +37,15 @@ public class BaseDropUnitClient extends BaseHttpClient {
     private static final String REQUEST_DELIVERY = "request-delivery";
     private static final String RESPONSE_DELIVERY = "response-delivery";
     private static final String DROP_DELETION = "drop-deletion";
+    
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public String executeEndpointDelivery(DropUnitEndpointDto dropUnit) {
         try {
             HttpResponse response = invokeHttpPost(URI_DELIVERY_ENDPOINT, dropUnit);
             assertOkStatus(DROP_DELIVERY, response.getStatusLine());
             HttpEntity entity = response.getEntity();
-            JsonNode obj = new ObjectMapper().readTree(entity.getContent());
+            JsonNode obj = OBJECT_MAPPER.readTree(entity.getContent());
             assertResult(DROP_DELIVERY, obj);
             JsonNode idValue = obj.get("id");
             assertNotNull("no id in response-body for drop-delivery", idValue);
@@ -64,7 +66,7 @@ public class BaseDropUnitClient extends BaseHttpClient {
                         requestDto.getRequestBody());
                 assertOkStatus(REQUEST_DELIVERY, response.getStatusLine());
                 HttpEntity entity = response.getEntity();
-                JsonNode obj = new ObjectMapper().readTree(entity.getContent());
+                JsonNode obj = OBJECT_MAPPER.readTree(entity.getContent());
                 assertResult(REQUEST_DELIVERY, obj);
                 EntityUtils.consume(entity);
             }
@@ -81,7 +83,7 @@ public class BaseDropUnitClient extends BaseHttpClient {
                         requestDto);
                 assertOkStatus(REQUEST_DELIVERY, response.getStatusLine());
                 HttpEntity entity = response.getEntity();
-                JsonNode obj = new ObjectMapper().readTree(entity.getContent());
+                JsonNode obj = OBJECT_MAPPER.readTree(entity.getContent());
                 assertResult(REQUEST_DELIVERY, obj);
                 EntityUtils.consume(entity);
             }
@@ -99,7 +101,7 @@ public class BaseDropUnitClient extends BaseHttpClient {
                         responseDto.getResponseBody());
                 assertOkStatus(RESPONSE_DELIVERY, response.getStatusLine());
                 HttpEntity entity = response.getEntity();
-                JsonNode obj = new ObjectMapper().readTree(entity.getContent());
+                JsonNode obj = OBJECT_MAPPER.readTree(entity.getContent());
                 assertResult(RESPONSE_DELIVERY, obj);
                 EntityUtils.consume(entity);
             }
@@ -114,7 +116,7 @@ public class BaseDropUnitClient extends BaseHttpClient {
                     .replace("{dropId}", dropId));
             assertEquals("incorrect response code", 200, response.getStatusLine().getStatusCode());
             HttpEntity entity = response.getEntity();
-            JsonNode obj = new ObjectMapper().readTree(entity.getContent());
+            JsonNode obj = OBJECT_MAPPER.readTree(entity.getContent());
             assertNotNull("no response-body for drop-delivery", obj);
             JsonNode countValue = obj.get("count");
             assertNotNull("no count in response-body for drop-delivery", countValue);
@@ -147,7 +149,7 @@ public class BaseDropUnitClient extends BaseHttpClient {
             HttpResponse response = invokeHttpGet(URI_COUNT_NOTFOUND);
             assertOkStatus("retrieve not found", response.getStatusLine());
             HttpEntity entity = response.getEntity();
-            JsonNode obj = new ObjectMapper().readTree(entity.getContent());
+            JsonNode obj = OBJECT_MAPPER.readTree(entity.getContent());
             assertNotNull("no response-body for drop-delivery", obj);
             JsonNode countValue = obj.get("count");
             assertNotNull("no count in response-body for drop-delivery", countValue);
@@ -165,7 +167,7 @@ public class BaseDropUnitClient extends BaseHttpClient {
                     .replace("{dropId}", id));
             assertOkStatus(DROP_DELETION, response.getStatusLine());
             HttpEntity entity = response.getEntity();
-            JsonNode obj = new ObjectMapper().readTree(response.getEntity().getContent());
+            JsonNode obj = OBJECT_MAPPER.readTree(response.getEntity().getContent());
             assertResult(DROP_DELETION, obj);
             EntityUtils.consume(entity);
         } catch (IOException e) {
@@ -184,7 +186,7 @@ public class BaseDropUnitClient extends BaseHttpClient {
 
     private HttpResponse invokeHttpPost(String deliveryEndpoint, Object dropUnit)
             throws IOException {
-        String bodyRequest = new ObjectMapper().writeValueAsString(dropUnit);
+        String bodyRequest = OBJECT_MAPPER.writeValueAsString(dropUnit);
         return super.invokeHttpPost(deliveryEndpoint, MediaType.APPLICATION_JSON, bodyRequest);
     }
 
