@@ -4,7 +4,7 @@
     <parent>
         <groupId>net.lisanza.dropunit</groupId>
         <artifactId>dropunit-parent</artifactId>
-        <version>1.2.4</version>
+        <version>1.2.5-SNAPSHOT</version>
     </parent>
 
     <groupId>net.lisanza.dropunit</groupId>
