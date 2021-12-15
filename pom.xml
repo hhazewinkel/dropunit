@@ -32,8 +32,8 @@
     </modules>
 
     <properties>
-        <commons.io.version>2.8.0</commons.io.version>
-        <dropwizard.version>2.0.20</dropwizard.version>
+        <commons.io.version>2.11.0</commons.io.version>
+        <dropwizard.version>2.0.26</dropwizard.version>
         <hamcrest.version>1.3</hamcrest.version>
         <httpclient.version>4.5.13</httpclient.version>
         <junit.version>4.13.2</junit.version>
