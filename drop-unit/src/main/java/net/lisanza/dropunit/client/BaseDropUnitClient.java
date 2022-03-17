@@ -6,6 +6,7 @@ import net.lisanza.dropunit.server.rest.dto.DropUnitEndpointDto;
 import net.lisanza.dropunit.server.rest.dto.DropUnitRequestDto;
 import net.lisanza.dropunit.server.rest.dto.DropUnitRequestPatternsDto;
 import net.lisanza.dropunit.server.rest.dto.DropUnitResponseDto;
+import net.lisanza.dropunit.server.rest.dto.ReceivedRequestDto;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -17,11 +18,11 @@ import java.io.IOException;
 import static net.lisanza.dropunit.server.rest.constants.RequestMappings.DROP_UNIT_SERVICE;
 import static net.lisanza.dropunit.server.rest.constants.RequestMappings.URI_CLEARALLDROPS;
 import static net.lisanza.dropunit.server.rest.constants.RequestMappings.URI_COUNT_DROPID;
-import static net.lisanza.dropunit.server.rest.constants.RequestMappings.URI_COUNT_NOTFOUND;
 import static net.lisanza.dropunit.server.rest.constants.RequestMappings.URI_DELIVERY_ENDPOINT;
 import static net.lisanza.dropunit.server.rest.constants.RequestMappings.URI_DELIVERY_ENDPOINT_DROPID;
 import static net.lisanza.dropunit.server.rest.constants.RequestMappings.URI_DELIVERY_ENDPOINT_DROPID_REQUESTBODY;
 import static net.lisanza.dropunit.server.rest.constants.RequestMappings.URI_DELIVERY_ENDPOINT_DROPID_RESPONSEBODY;
+import static net.lisanza.dropunit.server.rest.constants.RequestMappings.URI_GETALLNOTFOUNDS;
 import static net.lisanza.dropunit.server.rest.constants.RequestMappings.URI_RECIEVED_DROPID_NUMBER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -144,21 +145,19 @@ public class BaseDropUnitClient extends BaseHttpClient {
         return null; // will never happen
     }
 
-    public int executeRetrieveNotFound() {
+    public ReceivedRequestDto[]  executeRetrieveNotFound() {
         try {
-            HttpResponse response = invokeHttpGet(URI_COUNT_NOTFOUND);
+            HttpResponse response = invokeHttpGet(URI_GETALLNOTFOUNDS);
             assertOkStatus("retrieve not found", response.getStatusLine());
             HttpEntity entity = response.getEntity();
-            JsonNode obj = OBJECT_MAPPER.readTree(entity.getContent());
-            assertNotNull("no response-body for drop-delivery", obj);
-            JsonNode countValue = obj.get("count");
-            assertNotNull("no count in response-body for drop-delivery", countValue);
+            ReceivedRequestDto[] notFoundEndpoints = OBJECT_MAPPER.readValue(entity.getContent(), ReceivedRequestDto[].class);
+            assertNotNull("no response-body for drop-delivery", notFoundEndpoints);
             EntityUtils.consume(entity);
-            return countValue.asInt();
+            return notFoundEndpoints;
         } catch (IOException e) {
             fail("IO failure: " + e.getMessage());
         }
-        return -1; // will never happen
+        return null; // will never happen
     }
 
     public void executeEndpointDeletion(String id) {

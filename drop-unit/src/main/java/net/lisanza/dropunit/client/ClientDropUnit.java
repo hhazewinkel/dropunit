@@ -5,6 +5,8 @@ import net.lisanza.dropunit.server.rest.dto.DropUnitHeaderDto;
 import net.lisanza.dropunit.server.rest.dto.DropUnitRequestDto;
 import net.lisanza.dropunit.server.rest.dto.DropUnitRequestPatternsDto;
 import net.lisanza.dropunit.server.rest.dto.DropUnitResponseDto;
+import net.lisanza.dropunit.server.rest.dto.ReceivedRequestDto;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.naming.CannotProceedException;
 import javax.ws.rs.HttpMethod;
@@ -368,7 +370,7 @@ public class ClientDropUnit extends BaseDropUnitClient {
      * @param count The expected number of requests
      */
     public void assertCountRecievedRequests(int count) {
-        assertThat("incorrect request count for dropunit", executeRetrieveCount(id), is(count));
+        assertThat("unexpected request count", executeRetrieveCount(id), is(count));
     }
 
     /**
@@ -390,7 +392,8 @@ public class ClientDropUnit extends BaseDropUnitClient {
     public void assertReceivedFromPatterns(int number) {
         String requestBody = executeRetrieveReceived(id, number);
         for (String pattern : requestPatterns.getPatterns()) {
-            assertTrue("", requestBody.contains(pattern));
+            assertTrue("missing pattern ->> '" + pattern + "'",
+                    requestBody.contains(pattern));
         }
     }
 
@@ -411,16 +414,18 @@ public class ClientDropUnit extends BaseDropUnitClient {
      * @param toMatch
      */
     public void assertReceived(int number, String toMatch) {
-        assertThat(executeRetrieveReceived(id, number), is(toMatch));
-
+        assertThat("unexpected amount of expected requests",
+                executeRetrieveReceived(id, number), is(toMatch));
     }
 
     /**
      *
-     * @param number
+     * @param expected amount of expected not-found
      */
-    public void assertNotFound(int number) {
-        assertThat(executeRetrieveNotFound(), is(number));
+    public void assertNotFound(int expected) {
+        ReceivedRequestDto[] notFound = executeRetrieveNotFound();
+        assertThat("unexpected amount of 'not-found' ->> " + StringUtils.join(notFound, ","),
+                notFound.length, is(expected));
     }
 
     // toString

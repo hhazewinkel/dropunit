@@ -7,6 +7,7 @@ import net.lisanza.dropunit.server.config.yml.EndpointDocument;
 import net.lisanza.dropunit.server.health.HealthCheckService;
 import net.lisanza.dropunit.server.mappers.ExceptionHandler;
 import net.lisanza.dropunit.server.mappers.ValidationHandler;
+import net.lisanza.dropunit.server.rest.controlers.DropAssertionController;
 import net.lisanza.dropunit.server.rest.controlers.DropRegistrationController;
 import net.lisanza.dropunit.server.rest.controlers.DropUnitController;
 import net.lisanza.dropunit.server.rest.dto.DropUnitHeaderDto;
@@ -49,6 +50,7 @@ public class DropUnitApplication<TypeOfConfiguration extends DropUnitConfigurati
         // Registration of the REST controllers
         environment.jersey().register(new DropUnitController(dropUnitService, dropUnitCount));
         environment.jersey().register(new DropRegistrationController(dropUnitService, dropUnitCount));
+        environment.jersey().register(new DropAssertionController(dropUnitService, dropUnitCount));
 
         // Registration of the required Dropwizard health checks
         environment.healthChecks().register("HEALTH", new HealthCheckService());

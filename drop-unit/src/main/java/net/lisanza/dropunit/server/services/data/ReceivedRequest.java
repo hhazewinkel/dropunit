@@ -20,12 +20,12 @@ public class ReceivedRequest {
 
     // getters and setters
 
-    public String getQueryString() {
-        return queryString;
+    public String getPath() {
+        return path;
     }
 
-    public void setQueryString(String queryString) {
-        this.queryString = queryString;
+    public String getQueryString() {
+        return queryString;
     }
 
     public String getMethod() {
