@@ -44,18 +44,22 @@ public class DropUnitService {
     }
 
     public String registerDefault(DropUnitEndpoint endpoint) {
+        LOGGER.debug("default before {}", defaults.size());
         String dropId = DROP_ID.generate();
         endpoint.setId(dropId);
-        LOGGER.debug("register {} - {}", dropId, endpoint);
+        LOGGER.debug("register default {} - {}", dropId, endpoint);
         defaults.add(endpoint);
+        LOGGER.debug("defaults after {}", defaults.size());
         return dropId;
     }
 
     public String register(DropUnitEndpoint endpoint) {
+        LOGGER.debug("registrations before {}", registrations.size());
         String dropId = DROP_ID.generate();
         endpoint.setId(dropId);
         LOGGER.debug("register {} - {}", dropId, endpoint);
         registrations.add(endpoint);
+        LOGGER.debug("registrations after {}", registrations.size());
         return dropId;
     }
 
