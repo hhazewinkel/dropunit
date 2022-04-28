@@ -21,13 +21,13 @@ public class LocationTestIT extends BaseRequest {
     public void shouldRedirect() throws Exception {
         // setup dropunit endpoint
         ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup()
-                .withPost("/default/path/redirect/remote-setup")
+                .withPost("/dynamic/path/redirect/remote-setup")
                 .withResponse(Response.Status.FOUND, MediaType.APPLICATION_XML, "<xyz></xyz>")
                 .withResponseHeader("Location", "https://this.domain.local/returned")
                 .drop();
 
         // invoke message on engine-under-test to use dropunit endpoint
-        HttpResponse response = httpClient.invokeHttpPost("/default/path/redirect/remote-setup",
+        HttpResponse response = httpClient.invokeHttpPost("/dynamic/path/redirect/remote-setup",
                 MediaType.APPLICATION_XML, "");
 
         // assert message from engine-under-test
@@ -45,7 +45,9 @@ public class LocationTestIT extends BaseRequest {
     @Test
     public void shouldRedirectByServerConfig() throws Exception {
         // setup dropunit endpoint
-        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup();
+        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup()
+                .withPost("/default/path/redirect")
+                .drop();
 
         // invoke message on engine-under-test to use dropunit endpoint
         HttpResponse response = httpClient.invokeHttpPost("/default/path/redirect",

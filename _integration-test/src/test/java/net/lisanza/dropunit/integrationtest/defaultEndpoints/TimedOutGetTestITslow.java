@@ -17,7 +17,8 @@ public class TimedOutGetTestITslow extends BaseRequest {
     public void shouldTestDefaultConfigurationEndpointOne() throws Exception {
         // setup dropunit endpoint
         ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST)
-                .withGet("default/path/six");
+                .withGet("default/path/six")
+                .drop();
         // invoke message on engine-under-test to use dropunit endpoint
         try {
             HttpResponse response = httpClient.invokeHttpGet("default/path/six",

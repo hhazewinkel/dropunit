@@ -8,6 +8,8 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 
+import javax.ws.rs.core.MediaType;
+
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -18,8 +20,7 @@ public class FilesGetTestIT extends BaseRequest {
     @Test
     public void shouldTestDefaultConfigurationEndpointOne() throws Exception {
         // setup dropunit endpoint
-        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST)
-                .withGet("default/path/one");
+        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup();
 
         // invoke message on engine-under-test to use dropunit endpoint
         HttpResponse response = httpClient.invokeHttpGet("default/path/one");
@@ -39,8 +40,7 @@ public class FilesGetTestIT extends BaseRequest {
     @Test
     public void shouldTestDefaultConfigurationEndpointOneWithParameters() throws Exception {
         // setup dropunit endpoint
-        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST)
-                .withGet("default/path/one?parameter=value");
+        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup();
 
         // invoke message on engine-under-test to use dropunit endpoint
         HttpResponse response = httpClient.invokeHttpGet("default/path/one?parameter=value");
@@ -60,11 +60,10 @@ public class FilesGetTestIT extends BaseRequest {
     @Test
     public void shouldTestDefaultConfigurationEndpointTwo() throws Exception {
         // setup dropunit endpoint
-        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST)
-                .withGet("default/path/two");
+        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup();
 
         // invoke message on engine-under-test to use dropunit endpoint
-        HttpResponse response = httpClient.invokeHttpGet("default/path/two");
+        HttpResponse response = httpClient.invokeHttpGet("/default/path/two");
 
         // assert message from engine-under-test
         assertEquals(200, response.getStatusLine().getStatusCode());
@@ -81,8 +80,7 @@ public class FilesGetTestIT extends BaseRequest {
     @Test
     public void shouldTestDefaultConfigurationEndpointThree() throws Exception {
         // setup dropunit endpoint
-        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST)
-                .withGet("default/path/three");
+        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup();
 
         // invoke message on engine-under-test to use dropunit endpoint
         HttpResponse response = httpClient.invokeHttpGet("default/path/three");
@@ -101,8 +99,7 @@ public class FilesGetTestIT extends BaseRequest {
     @Test
     public void shouldTestDefaultConfigurationEndpointFour() throws Exception {
         // setup dropunit endpoint
-        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST)
-                .withGet("default/path/four");
+        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup();
 
         // invoke message on engine-under-test to use dropunit endpoint
         HttpResponse response = httpClient.invokeHttpGet("default/path/four");
@@ -116,11 +113,10 @@ public class FilesGetTestIT extends BaseRequest {
     @Test
     public void shouldTestWithHeaders() throws Exception {
         // setup dropunit endpoint
-        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup()
-                .withGet("/default/path/and/headers");
+        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup();
         Header[] headers = new Header[]{
                 new BasicHeader("User-Agent", "DROP-UNIT"),
-                new BasicHeader("Authorization","xx-xx-xx")
+                new BasicHeader("Authorization", "xx-xx-xx")
         };
 
         // invoke message on engine-under-test to use dropunit endpoint
@@ -134,4 +130,23 @@ public class FilesGetTestIT extends BaseRequest {
 
         dropUnit.assertNotFound(0);
     }
+
+
+    @Test
+    public void shouldTestDynamicConfigurationEndpointFive() throws Exception {
+        // setup dropunit endpoint
+        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup()
+                .withGet("/dynamic/path/five?")
+                .withResponseOk(MediaType.APPLICATION_JSON, "{}")
+                .drop();
+
+        // invoke message on engine-under-test to use dropunit endpoint
+        HttpResponse response = httpClient.invokeHttpGet("dynamic/path/five?param=value");
+
+        // assert message from engine-under-test
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+        dropUnit.assertNotFound(0);
+    }
+
 }

@@ -183,14 +183,14 @@ public class PostTestIT extends BaseRequest {
 
         // setup dropunit endpoint
         ClientDropUnit dropUnit1 = new ClientDropUnit(DROP_UNIT_HOST).cleanup()
-                .withPost("test-post/with/path")
+                .withPost("/test-post/with/path")
                 .withRequestPattern(MediaType.APPLICATION_XML, data1)
                 .withResponseOk(MediaType.APPLICATION_XML, responseBody1)
                 .drop();
 
         // setup dropunit endpoint
         ClientDropUnit dropUnit2 = new ClientDropUnit(DROP_UNIT_HOST)
-                .withPost("test-post/with/path")
+                .withPost("/test-post/with/path")
                 .withRequestPattern(MediaType.APPLICATION_XML, data2)
                 .withResponseOk(MediaType.APPLICATION_XML, responseBody2)
                 .drop();

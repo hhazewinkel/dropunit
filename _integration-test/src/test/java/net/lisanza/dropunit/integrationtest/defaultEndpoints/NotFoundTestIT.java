@@ -21,7 +21,7 @@ public class NotFoundTestIT extends BaseRequest {
         ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup();
 
         // invoke message on engine-under-test to use dropunit endpoint
-        HttpResponse response = httpClient.invokeHttpGet("different-url-test/path/not-found-1");
+        HttpResponse response = httpClient.invokeHttpGet("/different-url-test/path/not-found-1");
 
         // assert message from engine-under-test
         assertEquals(404, response.getStatusLine().getStatusCode());

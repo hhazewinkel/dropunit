@@ -18,12 +18,11 @@ public class FilesGetByPatternsTestIT extends BaseRequest {
     @Test
     public void shouldTestDefaultConfigurationEndpointWithPatternAbc() throws Exception {
         // setup dropunit endpoint
-        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup()
-                .withPost("default/path/five");
+        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup();
 
         // invoke message on engine-under-test to use dropunit endpoint
         HttpResponse response = httpClient.invokeHttpPost("default/path/five",
-                MediaType.APPLICATION_XML,  "<abc></abc>");
+                MediaType.APPLICATION_XML, "<abc></abc>");
 
         // assert message from engine-under-test
         assertEquals(200, response.getStatusLine().getStatusCode());
@@ -34,14 +33,13 @@ public class FilesGetByPatternsTestIT extends BaseRequest {
         assertThat(body, containsString("<bag>droppy one</bag>"));
         assertThat(body, containsString("</pallet>"));
 
-        dropUnit.assertNotFound(0);
+        new ClientDropUnit(DROP_UNIT_HOST).assertNotFound(0);
     }
 
     @Test
     public void shouldTestDefaultConfigurationEndpointWithPatternXyz() throws Exception {
         // setup dropunit endpoint
-        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup()
-                .withPost("default/path/five");
+        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup();
 
         // invoke message on engine-under-test to use dropunit endpoint
         HttpResponse response = httpClient.invokeHttpPost("default/path/five",
@@ -62,11 +60,10 @@ public class FilesGetByPatternsTestIT extends BaseRequest {
     @Test
     public void shouldFailDefaultConfigurationEndpointWithPatterns() throws Exception {
         // setup dropunit endpoint
-        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup()
-                .withPost("default/path/five");
+        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup();
 
         // invoke message on engine-under-test to use dropunit endpoint
-        HttpResponse response = httpClient.invokeHttpPost("default/path/five",
+        HttpResponse response = httpClient.invokeHttpPost("/default/path/five",
                 MediaType.APPLICATION_XML, "<should></fail>");
 
         // assert message from engine-under-test
