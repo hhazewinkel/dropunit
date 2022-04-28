@@ -3,11 +3,14 @@ package net.lisanza.dropunit.server.rest.controlers;
 import net.lisanza.dropunit.server.services.DropUnitEndpoint;
 import net.lisanza.dropunit.server.services.DropUnitEndpointRequest;
 import net.lisanza.dropunit.server.services.data.ReceivedRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.ValidationException;
 import java.util.Map;
 
-public class EndpointValidator {
+public class RequestValidator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RequestValidator.class);
 
     protected void validate(DropUnitEndpoint endpoint, ReceivedRequest receivedRequest) {
         // validate
@@ -25,6 +28,7 @@ public class EndpointValidator {
     }
 
     protected void validateRequestHeader(String name, String endpointValue, String requestValue) {
+        LOGGER.debug("validateRequestHeader({}): '{}' <> '{}'", name, endpointValue, requestValue);
         if (isNullOrEmpty(endpointValue)
                 && isNullOrEmpty(requestValue)) {
             return;
@@ -38,6 +42,7 @@ public class EndpointValidator {
     }
 
     protected void validateRequestContentType(String endpointContentType, String requestContentType) {
+        LOGGER.debug("validateRequestContentType: '{}' <> '{}'", endpointContentType, requestContentType);
         if (isNullOrEmpty(endpointContentType)
                 && isNullOrEmpty(requestContentType)) {
             return;
@@ -53,6 +58,7 @@ public class EndpointValidator {
     private void validateRequestContent(DropUnitEndpointRequest dropUnitRequest, String body) {
         if (dropUnitRequest != null) {
             for (String pattern : dropUnitRequest.getPatterns()) {
+                LOGGER.debug("validate pattern '{}' in body", pattern);
                 if (!body.contains(pattern)) {
                     throw new ValidationException("pattern: '" + pattern + "' not in body\n" + body);
                 }

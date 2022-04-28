@@ -9,11 +9,11 @@ import static org.junit.Assert.fail;
 
 public class EndpointValidatorTest {
 
-    private EndpointValidator subject;
+    private RequestValidator subject;
 
     @Before
     public void setUp() throws Exception {
-        subject = new EndpointValidator();
+        subject = new RequestValidator();
     }
 
     @Test
