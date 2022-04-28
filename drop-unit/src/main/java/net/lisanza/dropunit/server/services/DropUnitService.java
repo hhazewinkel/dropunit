@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class DropUnitService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DropUnitService.class);
-    private static final DropId DROP_ID = new DropId();
 
     private EndpointRegistrations registrations = new EndpointRegistrations();
     private EndpointRegistrations defaults = new EndpointRegistrations();
@@ -45,7 +45,7 @@ public class DropUnitService {
 
     public String registerDefault(DropUnitEndpoint endpoint) {
         LOGGER.debug("default before {}", defaults.size());
-        String dropId = DROP_ID.generate();
+        String dropId = UUID.randomUUID().toString();
         endpoint.setId(dropId);
         LOGGER.debug("register default {} - {}", dropId, endpoint);
         defaults.add(endpoint);
@@ -55,7 +55,7 @@ public class DropUnitService {
 
     public String register(DropUnitEndpoint endpoint) {
         LOGGER.debug("registrations before {}", registrations.size());
-        String dropId = DROP_ID.generate();
+        String dropId = UUID.randomUUID().toString();
         endpoint.setId(dropId);
         LOGGER.debug("register {} - {}", dropId, endpoint);
         registrations.add(endpoint);
@@ -128,13 +128,5 @@ public class DropUnitService {
                 .append(" registrations ").append(registrations.size())
                 .append(" not found ").append(notFound.size());
         return stringBuilder;
-    }
-
-    private static class DropId {
-        private int id = hashCode();
-
-        public String generate() {
-            return Integer.toString(id++);
-        }
     }
 }
