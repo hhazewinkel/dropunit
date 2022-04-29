@@ -14,6 +14,7 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -64,6 +65,14 @@ public class DropUnitController {
                                    String content) {
         dropUnitCount.incrHttpDelete();
         return executeDropUnit(request, "DELETE", content);
+    }
+
+    @PATCH
+    @Path("{any: .*}")
+    public Response dropUnitPatch(@Context HttpServletRequest request,
+                                  String content) {
+        dropUnitCount.incrHttpPut();
+        return executeDropUnit(request, "PATCH", content);
     }
 
     public Response executeDropUnit(HttpServletRequest request, String method, String content) {

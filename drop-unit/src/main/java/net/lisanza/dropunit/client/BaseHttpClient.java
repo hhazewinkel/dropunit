@@ -6,6 +6,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
@@ -143,5 +144,42 @@ public class BaseHttpClient {
                 .setDefaultRequestConfig(requestConfig)
                 .disableRedirectHandling()
                 .build();
+    }
+
+    public HttpResponse invokeHttpPatch(String endpoint,
+                                       String contentType,
+                                       File requestDataFile)
+            throws IOException {
+        return invokeHttpPatch(endpoint, contentType, requestDataFile, null);
+    }
+
+    public HttpResponse invokeHttpPatch(String endpoint,
+                                       String contentType,
+                                       File requestDataFile,
+                                       RequestConfig requestConfig)
+            throws IOException {
+        return invokeHttpPatch(endpoint, contentType, readFromFile(requestDataFile), requestConfig);
+    }
+
+    public HttpResponse invokeHttpPatch(String endpoint,
+                                       String contentType,
+                                       String requestData)
+            throws IOException {
+        return invokeHttpPatch(endpoint, contentType, requestData, null);
+    }
+
+    public HttpResponse invokeHttpPatch(String endpoint,
+                                       String contentType,
+                                       String requestData,
+                                       RequestConfig requestConfig)
+            throws IOException {
+        org.apache.http.client.HttpClient client = getHttpClient(requestConfig);
+        HttpPatch httpPatch = new HttpPatch(baseUrl + endpoint);
+
+        StringEntity entity = new StringEntity(requestData, "UTF-8");
+        entity.setContentType(contentType);
+        httpPatch.setEntity(entity);
+
+        return client.execute(httpPatch);
     }
 }

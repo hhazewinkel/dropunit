@@ -107,6 +107,14 @@ public class ClientDropUnit extends BaseDropUnitClient {
     }
 
     /**
+     * Assign PATCH method for the dropunit with specific URL.
+     * @param uri The url path relative to the server
+     * @return The client-drop-unit.
+     */
+    public ClientDropUnit withPatch(String uri) {
+        return withEndpoint(uri, HttpMethod.PATCH);
+    }
+    /**
      * Assign method for the dropunit with specific URL.
      * @param uri The url path relative to the server
      * @param method The method of the HTTP operation

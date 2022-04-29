@@ -6,6 +6,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -79,6 +81,14 @@ public class ProxyController {
                                 String content) {
         LOGGER.info("DELETE: {}", request.getRequestURI());
         return buildProxyRequest(request, new HttpDelete());
+    }
+
+    @PATCH
+    @Path("{any: .*}")
+    public Response proxyPatch(@Context HttpServletRequest request,
+                                String content) {
+        LOGGER.info("PATCH: {}", request.getRequestURI());
+        return buildProxyRequest(request, new HttpPatch(), content);
     }
 
     private Response buildProxyRequest(HttpServletRequest request,
