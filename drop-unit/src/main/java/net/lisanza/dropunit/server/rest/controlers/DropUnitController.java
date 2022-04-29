@@ -120,8 +120,10 @@ public class DropUnitController {
         waitToRespond(endpoint.getDelay());
         Response.ResponseBuilder responseBuilder = buildResponse(endpoint);
         addHeaders(endpoint, responseBuilder);
-        addContentType(endpoint, responseBuilder);
-        addContent(endpoint, responseBuilder);
+        if (endpoint.getResponse() != null) {
+            addContentType(endpoint, responseBuilder);
+            addContent(endpoint, responseBuilder);
+        }
         return responseBuilder.build();
     }
 

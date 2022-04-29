@@ -16,6 +16,7 @@ import static net.lisanza.dropunit.server.utils.FileUtils.readFromFile;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -44,6 +45,28 @@ public class PatchTestIT extends BaseRequest {
         String body = EntityUtils.toString(response.getEntity(), "UTF-8");
         assertNotNull(body);
         assertThat(body, containsString(readFromFile(RESPONSE_FILE)));
+
+        dropUnit.assertCountRecievedRequests(1);
+        dropUnit.assertNotFound(0);
+    }
+
+
+    @Test
+    public void shouldTestWithPathAndNoContent() throws Exception {
+        // setup dropunit endpoint
+        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup()
+                .withPatch("/dynamic/with/path/to/patch")
+                .withRequestPattern(MediaType.APPLICATION_XML, "<bag>droppy</bag>")
+                .withResponseNoContent()
+                .drop();
+
+        // invoke message on engine-under-test to use dropunit endpoint
+        HttpResponse response = httpClient.invokeHttpPatch(dropUnit.getUrl(),
+                MediaType.APPLICATION_XML, new File(REQUEST_FILE));
+
+        // assert message from engine-under-test
+        assertEquals(204, response.getStatusLine().getStatusCode());
+        assertNull(response.getEntity());
 
         dropUnit.assertCountRecievedRequests(1);
         dropUnit.assertNotFound(0);
@@ -141,6 +164,29 @@ public class PatchTestIT extends BaseRequest {
         String body = EntityUtils.toString(response.getEntity(), "UTF-8");
         assertNotNull(body);
         assertThat(body, containsString(readFromFile(RESPONSE_FILE)));
+
+        dropUnit.assertCountRecievedRequests(1);
+        dropUnit.assertReceivedFromFile(1, REQUEST_FILE);
+        dropUnit.assertNotFound(0);
+    }
+
+    @Test
+    public void shouldTestWithHeadersAndNoContent() throws Exception {
+        // setup dropunit endpoint
+        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup()
+                .withPatch("/dynamic/with/path/to/patch/with/headers")
+                .withHeader("Connection", "keep-alive")
+                .withRequestPattern(MediaType.APPLICATION_XML, "<bag>droppy</bag>")
+                .withResponseNoContent()
+                .drop();
+
+        // invoke message on engine-under-test to use dropunit endpoint
+        HttpResponse response = httpClient.invokeHttpPatch(dropUnit.getUrl(),
+                MediaType.APPLICATION_XML, new File(REQUEST_FILE));
+
+        // assert message from engine-under-test
+        assertEquals(204, response.getStatusLine().getStatusCode());
+        assertNull(response.getEntity());
 
         dropUnit.assertCountRecievedRequests(1);
         dropUnit.assertReceivedFromFile(1, REQUEST_FILE);

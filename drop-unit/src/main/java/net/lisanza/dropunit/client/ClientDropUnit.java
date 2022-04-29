@@ -240,6 +240,21 @@ public class ClientDropUnit extends BaseDropUnitClient {
     }
 
     /**
+     * When HTTP request is invoked the simulator must respond with this response-code, content-type and HTTP-body.
+     * @return The client-drop-unit.
+     * @throws CannotProceedException when the endpoint is not defined.
+     */
+    public ClientDropUnit withResponseNoContent()
+            throws CannotProceedException {
+        if (this.dropUnitEndpointDto == null) {
+            throw new CannotProceedException("withEndpoint is not called before");
+        }
+        this.dropUnitEndpointDto.setResponseCode(Response.Status.NO_CONTENT.getStatusCode());
+        this.responseDto = null;
+        return this;
+    }
+
+    /**
      * When HTTP request is matched respond also with HTTP header.
      * @param name The header key
      * @param value The header value

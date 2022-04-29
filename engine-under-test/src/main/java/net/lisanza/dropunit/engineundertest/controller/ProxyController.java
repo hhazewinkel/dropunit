@@ -144,13 +144,15 @@ public class ProxyController {
     }
 
     private Response buildProxyResponse(HttpResponse response) throws IOException {
-        String body = EntityUtils.toString(response.getEntity(), "UTF-8");
-        printResponse(response, body);
-
         Response.ResponseBuilder responseBuilder = Response
                 .status(Response.Status.fromStatusCode(response.getStatusLine().getStatusCode()));
         buildHeaders(response, responseBuilder);
-        return responseBuilder.entity(body).build();
+        if (response.getEntity() != null) {
+            String body = EntityUtils.toString(response.getEntity(), "UTF-8");
+            printResponse(response, body);
+            return responseBuilder.entity(body).build();
+        }
+        return responseBuilder.build();
     }
 
     private void buildHeaders(HttpResponse response,
