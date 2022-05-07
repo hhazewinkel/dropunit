@@ -3,7 +3,7 @@
 
     <groupId>net.lisanza.dropunit</groupId>
     <artifactId>dropunit-parent</artifactId>
-    <version>1.2.7-SNAPSHOT</version>
+    <version>1.2.8-SNAPSHOT</version>
 
     <packaging>pom</packaging>
     <name>DropUnit parent</name>
