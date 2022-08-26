@@ -201,4 +201,36 @@ public class GetTestIT extends BaseRequest {
         dropUnit.assertCountRecievedRequests(0);
         dropUnit.assertNotFound(1);
     }
+
+    @Test
+    public void shouldFailUponRemove() throws Exception {
+        // setup dropunit endpoint
+        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup()
+                .withGet("test-get/with/remove")
+                .withResponseOkFromFile(MediaType.APPLICATION_XML, RESPONSE_FILE)
+                .drop();
+
+        // invoke message on engine-under-test to use dropunit endpoint
+        HttpResponse response = httpClient.invokeHttpGet(dropUnit.getUrl());
+
+        // assert message from engine-under-test
+        assertEquals(200, response.getStatusLine().getStatusCode());
+        String body = EntityUtils.toString(response.getEntity(), "UTF-8");
+        assertNotNull(body);
+        assertThat(body, containsString(readFromFile(RESPONSE_FILE)));
+
+        dropUnit.assertCountRecievedRequests(1);
+        dropUnit.assertReceived(1);
+        dropUnit.assertNotFound(0);
+
+        dropUnit.remove();
+
+        // invoke message on engine-under-test to use dropunit endpoint
+        response = httpClient.invokeHttpGet(dropUnit.getUrl());
+
+        // assert message from engine-under-test
+        assertEquals(404, response.getStatusLine().getStatusCode());
+
+        dropUnit.assertNotFound(1);
+    }
 }

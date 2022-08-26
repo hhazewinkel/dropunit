@@ -101,12 +101,10 @@ public class DropAssertionController {
     @GET
     @Path(URI_COUNT_DROPID)
     public DropUnitRegistrationResponseDto getDropCount(@PathParam("dropId") String dropId) {
-        boolean found = false;
         try {
             LOGGER.debug("Called getDropCount");
             DropUnitEndpoint endpoint = dropUnitService.lookupEndpoint(dropId);
             if (endpoint != null) {
-                found = true;
                 return new DropUnitRegistrationResponseDto()
                         .withId(dropId)
                         .withResult("OK")
@@ -115,11 +113,7 @@ public class DropAssertionController {
         } catch (Exception e) {
             LOGGER.warn("Failure generating response getDropCount", e);
         }
-        if (found) {
-            throw new NotFoundException("could not find endpoint:" + dropId);
-        } else {
-            throw new InternalServerErrorException();
-        }
+        throw new NotFoundException("could not find endpoint:" + dropId);
     }
 
     @DELETE
@@ -127,7 +121,7 @@ public class DropAssertionController {
     public DropUnitRegistrationResponseDto deleteEndpoint(@PathParam("dropId") String dropId) {
         boolean found = false;
         try {
-            LOGGER.debug("Called getDropCount");
+            LOGGER.debug("Called deleteEndpoint");
             DropUnitEndpoint endpoint = dropUnitService.deregister(dropId);
             if (endpoint != null) {
                 found = true;

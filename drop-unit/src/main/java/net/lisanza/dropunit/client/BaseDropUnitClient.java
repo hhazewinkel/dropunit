@@ -26,6 +26,7 @@ import static net.lisanza.dropunit.server.rest.constants.RequestMappings.URI_GET
 import static net.lisanza.dropunit.server.rest.constants.RequestMappings.URI_RECIEVED_DROPID_NUMBER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class BaseDropUnitClient extends BaseHttpClient {
@@ -195,7 +196,9 @@ public class BaseDropUnitClient extends BaseHttpClient {
         assertNotNull("no response-body for " + message, obj);
         JsonNode resultValue = obj.get("result");
         assertNotNull("no result in response-body for " + message, resultValue);
-        assertEquals("failure for " + message, "OK", resultValue.textValue());
+        assertTrue("failure for " + message,
+                ("OK".equals(resultValue.textValue())
+                || "deleted".equals(resultValue.textValue())));
     }
 
     private void assertOkStatus(String message, StatusLine status) {

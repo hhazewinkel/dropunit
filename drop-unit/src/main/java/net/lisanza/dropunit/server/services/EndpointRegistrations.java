@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.BadRequestException;
-import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +51,6 @@ public class EndpointRegistrations extends ArrayList<DropUnitEndpoint> {
         DropUnitEndpoint endpoint = findInList(dropId);
         if (endpoint == null) {
             LOGGER.warn("no endpoint registered for {}", dropId);
-            throw new NotFoundException("no endpoint registered for " + dropId);
         }
         return endpoint;
     }

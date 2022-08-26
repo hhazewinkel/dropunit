@@ -64,12 +64,15 @@ public class DropUnitService {
     }
 
     public DropUnitEndpoint deregister(String dropId) {
+        LOGGER.debug("registrations before {}", registrations.size());
         for (DropUnitEndpoint registration: registrations) {
             if ((registration.getId() != null) && (registration.getId().equals(dropId))) {
-                registrations.remove(dropId);
+                registrations.remove(registration);
+                LOGGER.debug("registrations after {}", registrations.size());
                 return registration;
             }
         }
+        LOGGER.debug("registrations after {}", registrations.size());
         return null;
     }
 

@@ -370,6 +370,16 @@ public class ClientDropUnit extends BaseDropUnitClient {
     }
 
     /**
+     * Remove this endpoints in the simulator.
+     * @return The client-drop-unit.
+     * @throws IOException
+     */
+    public ClientDropUnit remove() throws IOException {
+        executeEndpointDeletion(id);
+        return this;
+    }
+
+    /**
      * Configure the dropunit (endpoint) in the simulator remotely.
      * @return The client-drop-unit.
      * @throws IOException
