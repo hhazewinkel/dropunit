@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import javax.validation.ValidationException;
 import java.util.Map;
 
-public class RequestValidator {
+class RequestValidator {
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestValidator.class);
 
     protected void validate(DropUnitEndpoint endpoint, ReceivedRequest receivedRequest) {

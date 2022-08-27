@@ -29,7 +29,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class BaseDropUnitClient extends BaseHttpClient {
+class BaseDropUnitClient extends BaseHttpClient {
 
     public BaseDropUnitClient(String baseUrl) {
         super(baseUrl + DROP_UNIT_SERVICE);

@@ -7,7 +7,7 @@ import javax.ws.rs.BadRequestException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EndpointRegistrations extends ArrayList<DropUnitEndpoint> {
+class EndpointRegistrations extends ArrayList<DropUnitEndpoint> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EndpointRegistrations.class);
 
