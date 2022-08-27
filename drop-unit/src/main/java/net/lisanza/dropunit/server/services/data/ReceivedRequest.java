@@ -6,6 +6,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
 public class ReceivedRequest {
 
     private String path;
@@ -85,7 +87,7 @@ public class ReceivedRequest {
             url.append('/');
         }
         url.append(path);
-        if ((queryString != null) && !queryString.isEmpty()) {
+        if (isNotEmpty(queryString)) {
             url.append('?').append(queryString);
         }
         return url.toString();

@@ -1,5 +1,6 @@
 package net.lisanza.dropunit.server.services;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,8 +44,8 @@ class EndpointRegistrations extends ArrayList<DropUnitEndpoint> {
         return subList;
     }
 
-    public DropUnitEndpoint findById(String dropId) {
-        if (dropId == null || dropId.isEmpty()) {
+    public DropUnitEndpoint findById(final String dropId) {
+        if (StringUtils.isEmpty(dropId)) {
             LOGGER.warn("'dropId' is missing!");
             throw new BadRequestException("'dropId' is missing!");
         }

@@ -6,6 +6,8 @@ import net.lisanza.dropunit.server.services.DropUnitEndpointRequest;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 public class EndpointDocument {
 
     /**
@@ -138,10 +140,10 @@ public class EndpointDocument {
 
     @JsonProperty
     public String getResponseBodyFileName() {
-        if ((responseBodyFileName == null) || responseBodyFileName.isEmpty()) {
+        if (isEmpty(responseBodyFileName)) {
             return null;
         }
-        if ((System.getenv("PREFIX") == null) || System.getenv("PREFIX").isEmpty()) {
+        if (isEmpty(System.getenv("PREFIX"))) {
             return responseBodyFileName;
         } else {
             return System.getenv("PREFIX") + responseBodyFileName;

@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static net.lisanza.dropunit.server.utils.FileUtils.readFromFile;
+import static org.apache.commons.lang3.ArrayUtils.isNotEmpty;
 
 public class BaseHttpClient {
 
@@ -133,7 +134,7 @@ public class BaseHttpClient {
                                       RequestConfig requestConfig) throws IOException {
         HttpClient client = getHttpClient(requestConfig);
         HttpGet request = new HttpGet(baseUrl + endpoint);
-        if ((headers != null) && (0 < headers.length)) {
+        if (isNotEmpty(headers)) {
             request.setHeaders(headers);
         }
         return client.execute(request);

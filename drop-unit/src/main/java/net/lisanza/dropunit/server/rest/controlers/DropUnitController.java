@@ -28,7 +28,7 @@ public class DropUnitController {
 
     private final DropUnitCount dropUnitCount;
     private final DropUnitService dropUnitService;
-    private final RequestValidator validator = new RequestValidator();
+    private final EndpointValidator validator = new EndpointValidator();
 
     public DropUnitController(DropUnitService dropUnitService,
                               DropUnitCount dropUnitCount) {

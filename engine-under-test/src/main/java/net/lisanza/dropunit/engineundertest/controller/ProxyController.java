@@ -36,6 +36,7 @@ import static javax.ws.rs.core.HttpHeaders.COOKIE;
 import static javax.ws.rs.core.HttpHeaders.LOCATION;
 import static javax.ws.rs.core.HttpHeaders.SET_COOKIE;
 import static javax.ws.rs.core.HttpHeaders.USER_AGENT;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Path("/")
 public class ProxyController {
@@ -136,7 +137,7 @@ public class ProxyController {
     }
 
     private String constructUrl(HttpServletRequest request) {
-        if ((request.getQueryString() == null) || request.getQueryString().isEmpty()) {
+        if (isEmpty(request.getQueryString())) {
             return request.getPathInfo();
         } else {
             return request.getPathInfo() + "?" + request.getQueryString();

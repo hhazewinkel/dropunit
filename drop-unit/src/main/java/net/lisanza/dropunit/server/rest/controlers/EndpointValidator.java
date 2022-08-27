@@ -9,8 +9,10 @@ import org.slf4j.LoggerFactory;
 import javax.validation.ValidationException;
 import java.util.Map;
 
-class RequestValidator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequestValidator.class);
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
+class EndpointValidator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EndpointValidator.class);
 
     protected void validate(DropUnitEndpoint endpoint, ReceivedRequest receivedRequest) {
         // validate
@@ -29,12 +31,12 @@ class RequestValidator {
 
     protected void validateRequestHeader(String name, String endpointValue, String requestValue) {
         LOGGER.debug("validateRequestHeader({}): '{}' <> '{}'", name, endpointValue, requestValue);
-        if (isNullOrEmpty(endpointValue)
-                && isNullOrEmpty(requestValue)) {
+        if (isEmpty(endpointValue)
+                && isEmpty(requestValue)) {
             return;
         }
-        if (!isNullOrEmpty(endpointValue)
-                && !isNullOrEmpty(requestValue)
+        if (!isEmpty(endpointValue)
+                && !isEmpty(requestValue)
                 && (endpointValue.equals(requestValue))) {
             return;
         }
@@ -43,12 +45,12 @@ class RequestValidator {
 
     protected void validateRequestContentType(String endpointContentType, String requestContentType) {
         LOGGER.debug("validateRequestContentType: '{}' <> '{}'", endpointContentType, requestContentType);
-        if (isNullOrEmpty(endpointContentType)
-                && isNullOrEmpty(requestContentType)) {
+        if (isEmpty(endpointContentType)
+                && isEmpty(requestContentType)) {
             return;
         }
-        if (!isNullOrEmpty(endpointContentType)
-                && !isNullOrEmpty(requestContentType)
+        if (!isEmpty(endpointContentType)
+                && !isEmpty(requestContentType)
                 && (endpointContentType.equals(requestContentType))) {
             return;
         }
@@ -67,9 +69,4 @@ class RequestValidator {
         }
         throw new ValidationException("request-body: not matching'\n" + body);
     }
-
-    private boolean isNullOrEmpty(String string) {
-        return (string == null) || string.isEmpty();
-    }
-
 }

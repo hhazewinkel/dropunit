@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import static net.lisanza.dropunit.server.utils.FileUtils.readFromFile;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class DropUnitApplication<TypeOfConfiguration extends DropUnitConfiguration> extends Application<TypeOfConfiguration> {
 
@@ -74,7 +75,7 @@ public class DropUnitApplication<TypeOfConfiguration extends DropUnitConfigurati
                     .withHeaders(endpointDocument.getResponseHeaders())
                     .withContentType(endpointDocument.getResponseContentType())
                     .withBody("");
-            if ((endpointDocument.getResponseBodyFileName() != null) && !endpointDocument.getResponseBodyFileName().isEmpty()) {
+            if (isNotEmpty(endpointDocument.getResponseBodyFileName())) {
                 response.withBody(readFromFile(endpointDocument.getResponseBodyFileName()));
             }
             LOGGER.debug("response: {}", response);
