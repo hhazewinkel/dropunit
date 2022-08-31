@@ -5,6 +5,7 @@ import net.lisanza.dropunit.server.rest.dto.DropUnitHeaderDto;
 import net.lisanza.dropunit.server.rest.dto.DropUnitRequestDto;
 import net.lisanza.dropunit.server.rest.dto.DropUnitRequestPatternsDto;
 import net.lisanza.dropunit.server.rest.dto.DropUnitResponseDto;
+import net.lisanza.dropunit.server.rest.dto.DropUnitUrlParametersDto;
 import net.lisanza.dropunit.server.rest.dto.ReceivedRequestDto;
 import org.apache.commons.lang3.StringUtils;
 
@@ -133,6 +134,39 @@ public class ClientDropUnit extends BaseDropUnitClient {
         this.dropUnitEndpointDto = new DropUnitEndpointDto();
         this.dropUnitEndpointDto.setUrl(uri);
         this.dropUnitEndpointDto.setMethod(method);
+        return this;
+    }
+
+    /**
+     * Adding request parameter definition
+     * @param parameters
+     * @return The client-drop-unit.
+     * @throws CannotProceedException when the endpoint is not defined.
+     */
+    public ClientDropUnit withRequestParameters(final DropUnitUrlParametersDto parameters)
+            throws CannotProceedException {
+        if (this.dropUnitEndpointDto == null) {
+            throw new CannotProceedException("withEndpoint is not called before");
+        }
+        this.dropUnitEndpointDto.setRequestParameters(parameters);
+        return this;
+    }
+    /**
+     * Adding request parameter definition
+     * @param key
+     * @param value
+     * @return The client-drop-unit.
+     * @throws CannotProceedException when the endpoint is not defined.
+     */
+    public ClientDropUnit withRequestParameters(final String key, final String value)
+            throws CannotProceedException {
+        if (this.dropUnitEndpointDto == null) {
+            throw new CannotProceedException("withEndpoint is not called before");
+        }
+        if (this.dropUnitEndpointDto.getRequestParameters() == null) {
+            throw new CannotProceedException("withRequestParameters(<DropUnitUrlParametersDto>) is not called before");
+        }
+        this.dropUnitEndpointDto.getRequestParameters().withParameter(key, value);
         return this;
     }
 
