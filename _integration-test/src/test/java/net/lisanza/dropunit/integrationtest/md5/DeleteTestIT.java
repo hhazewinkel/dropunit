@@ -21,8 +21,6 @@ import static org.junit.Assert.fail;
 
 public class DeleteTestIT extends BaseRequest {
 
-    private static final String RESPONSE_FILE = "src/test/resources/xml/drop-response.xml";
-
     @Test
     public void shouldTestWithPath() throws Exception {
 

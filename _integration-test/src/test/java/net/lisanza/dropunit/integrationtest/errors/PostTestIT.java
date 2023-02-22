@@ -12,9 +12,6 @@ import static org.junit.Assert.assertEquals;
 
 public class PostTestIT extends BaseRequest {
 
-    private static final String REQUEST_FILE = "src/test/resources/xml/drop-request.xml";
-    private static final String RESPONSE_FILE = "src/test/resources/xml/drop-response.xml";
-
     @Test
     public void shouldTestWithNotFound() throws Exception {
         // setup dropunit endpoint
