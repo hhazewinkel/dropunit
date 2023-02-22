@@ -14,11 +14,10 @@ import static org.junit.Assert.fail;
 public class TimedOutGetTestITslow extends BaseRequest {
 
     @Test
-    public void shouldTestDefaultConfigurationEndpointOne() throws Exception {
+    public void shouldTestDefaultConfigurationEndpointSix() throws Exception {
         // setup dropunit endpoint
-        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST)
-                .withGet("default/path/six")
-                .drop();
+        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup();
+
         // invoke message on engine-under-test to use dropunit endpoint
         try {
             HttpResponse response = httpClient.invokeHttpGet("default/path/six",
@@ -31,6 +30,8 @@ public class TimedOutGetTestITslow extends BaseRequest {
         } catch (SocketTimeoutException e) {
             assertTrue(true);
         }
+
+        dropUnit.assertNotFound(0);
     }
 
 }
