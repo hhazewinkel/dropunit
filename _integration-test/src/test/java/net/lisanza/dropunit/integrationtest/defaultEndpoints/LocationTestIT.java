@@ -41,13 +41,10 @@ public class LocationTestIT extends BaseRequest {
         dropUnit.assertNotFound(0);
     }
 
-
     @Test
     public void shouldRedirectByServerConfig() throws Exception {
         // setup dropunit endpoint
-        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup()
-                .withPost("/default/path/redirect")
-                .drop();
+        ClientDropUnit dropUnit = new ClientDropUnit(DROP_UNIT_HOST).cleanup();
 
         // invoke message on engine-under-test to use dropunit endpoint
         HttpResponse response = httpClient.invokeHttpPost("/default/path/redirect",

@@ -38,7 +38,6 @@ public class DropUnitService {
         infoLoadedEndpoints(stringBuilder.append("endpoints: "));
         registrations.clear();
         notFound.clear();
-        registrations.addAll(defaults);
         infoLoadedEndpoints(stringBuilder.append(" -> after: "));
         return stringBuilder.toString();
     }
@@ -107,9 +106,14 @@ public class DropUnitService {
             LOGGER.warn("'method' is missing!");
             throw new BadRequestException("'method' is missing!");
         }
-        List<DropUnitEndpoint> foundUrls = registrations.findByUrlAndMethod(url, method);
-        Collections.sort(foundUrls);
-        return foundUrls;
+        List<DropUnitEndpoint> foundRegistrations = registrations.findByUrlAndMethod(url, method);
+        Collections.sort(foundRegistrations);
+        if (0 < foundRegistrations.size()) {
+            return foundRegistrations;
+        }
+        List<DropUnitEndpoint> foundDefaults = defaults.findByUrlAndMethod(url, method);
+        Collections.sort(foundDefaults);
+        return foundDefaults;
     }
 
     public DropUnitEndpoint lookupEndpoint(String dropId) {
