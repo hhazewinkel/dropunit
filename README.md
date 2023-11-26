@@ -231,4 +231,4 @@ note: These endpoints are persistent when a remote client invoke the 'clear all 
 operation.
 
 
-/* Copyright 2019 Harrie Hazewinkel. All rights reserved. */
+/* Copyright 2023 Harrie Hazewinkel. All rights reserved. */
