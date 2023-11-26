@@ -2,6 +2,7 @@ package net.lisanza.dropunit.server.services.data;
 
 import net.lisanza.dropunit.server.rest.dto.DropUnitHeaderDto;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,8 @@ public class ReceivedRequest {
     private String path;
 
     private String queryString;
+
+    private ArrayList<String> receivedParameterAndValues = new ArrayList<>();
 
     private String method;
 
@@ -28,6 +31,10 @@ public class ReceivedRequest {
 
     public String getQueryString() {
         return queryString;
+    }
+
+    public ArrayList<String> getParameterAndValues() {
+        return receivedParameterAndValues;
     }
 
     public String getMethod() {
@@ -59,6 +66,12 @@ public class ReceivedRequest {
 
     public ReceivedRequest withQueryString(String queryString) {
         this.queryString = queryString;
+        if (isNotEmpty(queryString)) {
+            // split into parameters (key / value cobinations)
+            for (String pair : queryString.split("&")) {
+                receivedParameterAndValues.add(pair);
+            }
+        }
         return this;
     }
 
@@ -105,5 +118,31 @@ public class ReceivedRequest {
                 .append(", headers=").append(headers)
                 .append(", body=").append(body)
                 .append('}').toString();
+    }
+
+    public static class ReceivedParameter {
+        private String key;
+        private String value;
+
+        public ReceivedParameter(String key, String value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
     }
 }

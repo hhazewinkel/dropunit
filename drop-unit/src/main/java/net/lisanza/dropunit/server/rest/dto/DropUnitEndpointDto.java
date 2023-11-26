@@ -16,7 +16,7 @@ public class DropUnitEndpointDto {
     private String method;
 
     @JsonProperty("requestParameters")
-    private DropUnitUrlParametersDto requestParameters;
+    private DropUnitParametersDto requestParameters;
 
     @JsonProperty("requestHeaders")
     private List<DropUnitHeaderDto> requestHeaders = new ArrayList();
@@ -49,11 +49,11 @@ public class DropUnitEndpointDto {
         this.method = method;
     }
 
-    public DropUnitUrlParametersDto getRequestParameters() {
+    public DropUnitParametersDto getRequestParameters() {
         return requestParameters;
     }
 
-    public void setRequestParameters(DropUnitUrlParametersDto requestParameters) {
+    public void setRequestParameters(DropUnitParametersDto requestParameters) {
         this.requestParameters = requestParameters;
     }
 

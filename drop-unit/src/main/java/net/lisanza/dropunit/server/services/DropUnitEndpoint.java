@@ -1,6 +1,7 @@
 package net.lisanza.dropunit.server.services;
 
 import net.lisanza.dropunit.server.rest.dto.DropUnitHeaderDto;
+import net.lisanza.dropunit.server.rest.dto.DropUnitParametersDto;
 import net.lisanza.dropunit.server.services.data.ReceivedRequest;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -16,6 +17,8 @@ public class DropUnitEndpoint implements Comparable<DropUnitEndpoint> {
     private String url;
 
     private String method;
+
+    private EndPointParameters parameters;
 
     private Map<String, String> headers = new Hashtable<>();
 
@@ -53,6 +56,14 @@ public class DropUnitEndpoint implements Comparable<DropUnitEndpoint> {
 
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    public EndPointParameters getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(EndPointParameters parameters) {
+        this.parameters = parameters;
     }
 
     public Map<String, String> getHeaders() {
@@ -133,6 +144,22 @@ public class DropUnitEndpoint implements Comparable<DropUnitEndpoint> {
 
     public DropUnitEndpoint withMethod(String method) {
         this.method = method;
+        return this;
+    }
+
+    public DropUnitEndpoint withParameters(DropUnitParametersDto dto) {
+        this.parameters = new EndPointParameters();
+        if (dto != null) {
+            parameters.setMatchAll(dto.isMatchAll());
+            parameters.setMatchAll(dto.isMatchAll());
+            parameters.setMatchValue(dto.isMatchValue());
+            for (String key : dto.getIncludedParameters().keySet()) {
+                parameters.withParameter(key, dto.getIncludedParameters().get(key));
+            }
+            for (String key : dto.getExcludedParameters().keySet()) {
+                parameters.withoutParameter(key, dto.getExcludedParameters().get(key));
+            }
+        }
         return this;
     }
 
