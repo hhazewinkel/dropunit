@@ -2,6 +2,17 @@
 
 docker-compose -f ./_docker/application/docker-compose-it.yml stop
 
+case `uname` in
+    Darwin)
+	export JAVA_HOME=/Library/Java/JavaVirtualMachines/openjdk17/Contents/Home
+	echo "java-home: $JAVA_HOME"
+	;;
+    *)
+	echo "not supported platform for java 17"
+	exit
+	;;
+esac
+
 mvn clean package || exit
 
 rm -rf drop-unit-simulator/logs/*
