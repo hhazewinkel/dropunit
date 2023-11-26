@@ -1,7 +1,7 @@
 package net.lisanza.dropunit.server;
 
-import io.dropwizard.Application;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.setup.Environment;
 import net.lisanza.dropunit.server.config.yml.DropUnitConfiguration;
 import net.lisanza.dropunit.server.config.yml.EndpointDocument;
 import net.lisanza.dropunit.server.health.HealthCheckService;
@@ -59,7 +59,7 @@ public class DropUnitApplication<TypeOfConfiguration extends DropUnitConfigurati
 
     protected void initConfig(TypeOfConfiguration config,
                               DropUnitService dropUnitService) {
-        if (config.getEndpoints() != null){
+        if (config.getEndpoints() != null) {
             for (EndpointDocument endpointDocument : config.getEndpoints()) {
                 configEndpoint(endpointDocument, dropUnitService);
             }

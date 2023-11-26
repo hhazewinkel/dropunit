@@ -1,7 +1,7 @@
 package net.lisanza.dropunit.server.config.yml;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
 
 import java.util.List;
 
