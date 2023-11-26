@@ -21,6 +21,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * This class is to be used for setting up the DropUnit simulator.
+ */
 public class ClientDropUnit extends BaseDropUnitClient {
 
     private String id;
@@ -48,7 +51,9 @@ public class ClientDropUnit extends BaseDropUnitClient {
     /**
      * Retrieves the internal Id of the dropunit with which one can collect data.
      * @return The Id of the dropunit in the simulator.
+     * @deprecated Just internal en no need to expose. Usage of the instantiated 'ClientDropUnit' is sufficient.
      */
+    @Deprecated
     public String getId() {
         return id;
     }
@@ -72,6 +77,7 @@ public class ClientDropUnit extends BaseDropUnitClient {
 
     /**
      * Assign GET method for the dropunit with specific URL.
+     * Convenience operation for an endpoint with http-method 'GET'.
      * @param uri The url path relative to the server
      * @return The client-drop-unit.
      */
@@ -81,6 +87,7 @@ public class ClientDropUnit extends BaseDropUnitClient {
 
     /**
      * Assign POST method for the dropunit with specific URL.
+     * Convenience operation for an endpoint with http-method 'POST'.
      * @param uri The url path relative to the server
      * @return The client-drop-unit.
      */
@@ -90,6 +97,7 @@ public class ClientDropUnit extends BaseDropUnitClient {
 
     /**
      * Assign PUT method for the dropunit with specific URL.
+     * Convenience operation for an endpoint with http-method 'PUT'.
      * @param uri The url path relative to the server
      * @return The client-drop-unit.
      */
@@ -99,6 +107,7 @@ public class ClientDropUnit extends BaseDropUnitClient {
 
     /**
      * Assign DELETE method for the dropunit with specific URL.
+     * Convenience operation for an endpoint with http-method 'DELETE'.
      * @param uri The url path relative to the server
      * @return The client-drop-unit.
      */
@@ -108,6 +117,7 @@ public class ClientDropUnit extends BaseDropUnitClient {
 
     /**
      * Assign PATCH method for the dropunit with specific URL.
+     * Convenience operation for an endpoint with http-method 'PATCH'.
      * @param uri The url path relative to the server
      * @return The client-drop-unit.
      */
@@ -116,6 +126,7 @@ public class ClientDropUnit extends BaseDropUnitClient {
     }
     /**
      * Assign method for the dropunit with specific URL.
+     * It is also the first setup operation that must be made to a 'dropunit'.
      * @param uri The url path relative to the server
      * @param method The method of the HTTP operation
      * @return The client-drop-unit.
@@ -128,7 +139,9 @@ public class ClientDropUnit extends BaseDropUnitClient {
     }
 
     /**
-     * When HTTP request is invoked the simluator must match this HTTP header.
+     * When HTTP request is invoked the simulator must match this HTTP header.
+     * For instance the Content-Type of a requests required can be created with
+     * client.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
      * @param name The header key
      * @param value The header value
      * @return The client-drop-unit.
@@ -381,6 +394,7 @@ public class ClientDropUnit extends BaseDropUnitClient {
 
     /**
      * Configure the dropunit (endpoint) in the simulator remotely.
+     * This must be the last call of a setup.
      * @return The client-drop-unit.
      * @throws IOException
      */
