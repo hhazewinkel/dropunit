@@ -67,9 +67,7 @@ public class ClientDropUnit extends BaseDropUnitClient {
      */
     public String getUrl()
             throws CannotProceedException {
-        if (this.dropUnitEndpointDto == null) {
-            throw new CannotProceedException("withEndpoint is not called before");
-        }
+        checkDropUnitEndpoint();
         return dropUnitEndpointDto.getUrl();
     }
 
@@ -160,9 +158,7 @@ public class ClientDropUnit extends BaseDropUnitClient {
      */
     public ClientDropUnit withRequestBody(String contentType, String body)
             throws CannotProceedException {
-        if (this.dropUnitEndpointDto == null) {
-            throw new CannotProceedException("withEndpoint is not called before");
-        }
+        checkDropUnitEndpoint();
         this.requestBodyInfo = new DropUnitRequestDto();
         this.requestBodyInfo.setRequestContentType(contentType);
         this.requestBodyInfo.setRequestBody(body);
@@ -205,9 +201,7 @@ public class ClientDropUnit extends BaseDropUnitClient {
      */
     public ClientDropUnit withRequestPatterns(String contentType, List<String> patterns)
             throws CannotProceedException {
-        if (this.dropUnitEndpointDto == null) {
-            throw new CannotProceedException("withEndpoint is not called before");
-        }
+        checkDropUnitEndpoint();
         this.requestPatterns = new DropUnitRequestPatternsDto();
         this.requestPatterns.setRequestContentType(contentType);
         this.requestPatterns.setPatterns(patterns);
@@ -223,9 +217,7 @@ public class ClientDropUnit extends BaseDropUnitClient {
      */
     public ClientDropUnit withRequestPatternsFromFile(String contentType, String filename)
             throws CannotProceedException, IOException {
-        if (this.dropUnitEndpointDto == null) {
-            throw new CannotProceedException("withEndpoint is not called before");
-        }
+        checkDropUnitEndpoint();
         this.requestPatterns = new DropUnitRequestPatternsDto();
         this.requestPatterns.setRequestContentType(contentType);
         this.requestPatterns.setPatterns(readListFromXml(filename));
@@ -242,9 +234,7 @@ public class ClientDropUnit extends BaseDropUnitClient {
      */
     public ClientDropUnit withResponse(Response.Status status, String contentType, String body)
             throws CannotProceedException {
-        if (this.dropUnitEndpointDto == null) {
-            throw new CannotProceedException("withEndpoint is not called before");
-        }
+        checkDropUnitEndpoint();
         this.dropUnitEndpointDto.setResponseCode(status.getStatusCode());
         this.responseDto = new DropUnitResponseDto();
         this.responseDto.setResponseContentType(contentType);
@@ -259,9 +249,7 @@ public class ClientDropUnit extends BaseDropUnitClient {
      */
     public ClientDropUnit withResponseNoContent()
             throws CannotProceedException {
-        if (this.dropUnitEndpointDto == null) {
-            throw new CannotProceedException("withEndpoint is not called before");
-        }
+        checkDropUnitEndpoint();
         this.dropUnitEndpointDto.setResponseCode(Response.Status.NO_CONTENT.getStatusCode());
         this.responseDto = null;
         return this;
@@ -275,9 +263,7 @@ public class ClientDropUnit extends BaseDropUnitClient {
      */
     public ClientDropUnit withResponseHeader(String name, String value)
             throws CannotProceedException {
-        if (this.dropUnitEndpointDto == null) {
-            throw new CannotProceedException("withEndpoint is not called before");
-        }
+        checkDropUnitEndpoint();
         this.dropUnitEndpointDto.addResponseHeader(new DropUnitHeaderDto(name, value));
         return this;
     }
@@ -363,13 +349,23 @@ public class ClientDropUnit extends BaseDropUnitClient {
      */
     public ClientDropUnit withResponseDelay(int responseDelay)
             throws Exception {
-        if (this.dropUnitEndpointDto == null) {
-            throw new Exception("");
-        }
+        checkDropUnitEndpoint();
         this.dropUnitEndpointDto.setResponseDelay(responseDelay);
         return this;
     }
 
+    /**
+     * Setup DropUnitEndpoint
+     * @throws CannotProceedException when the endpoint is not defined.
+     */
+    private void checkDropUnitEndpoint()
+            throws CannotProceedException {
+        if (this.dropUnitEndpointDto == null) {
+            throw new CannotProceedException("withEndpoint is not called before");
+        }
+    }
+
+    /**
     // Remote operations
 
     /**
