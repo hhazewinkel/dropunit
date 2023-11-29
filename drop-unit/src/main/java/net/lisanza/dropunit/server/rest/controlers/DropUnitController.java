@@ -3,7 +3,7 @@ package net.lisanza.dropunit.server.rest.controlers;
 import net.lisanza.dropunit.server.rest.constants.RequestMappings;
 import net.lisanza.dropunit.server.services.DropUnitCount;
 import net.lisanza.dropunit.server.services.DropUnitEndpoint;
-import net.lisanza.dropunit.server.services.DropUnitService;
+import net.lisanza.dropunit.server.services.EndpointRegistrationService;
 import net.lisanza.dropunit.server.services.data.ReceivedRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +27,10 @@ public class DropUnitController {
     private static final Logger LOGGER = LoggerFactory.getLogger(DropUnitController.class);
 
     private final DropUnitCount dropUnitCount;
-    private final DropUnitService dropUnitService;
+    private final EndpointRegistrationService dropUnitService;
     private final EndpointValidator validator = new EndpointValidator();
 
-    public DropUnitController(DropUnitService dropUnitService,
+    public DropUnitController(EndpointRegistrationService dropUnitService,
                               DropUnitCount dropUnitCount) {
         this.dropUnitService = dropUnitService;
         this.dropUnitCount = dropUnitCount;
@@ -96,7 +96,7 @@ public class DropUnitController {
             LOGGER.warn("'received request' is missing!");
             throw new BadRequestException("'received request' is missing!");
         }
-        for (DropUnitEndpoint endpoint : dropUnitService.lookupEndpoint(receivedRequest.getUrl(), receivedRequest.getMethod())) {
+        for (DropUnitEndpoint endpoint : dropUnitService.lookupEndpoints(receivedRequest.getUrl(), receivedRequest.getMethod())) {
             try {
                 // validate if this is the request endpoint to be used
                 validator.validate(endpoint, receivedRequest);

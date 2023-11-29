@@ -8,7 +8,7 @@ import net.lisanza.dropunit.server.services.DropUnitCount;
 import net.lisanza.dropunit.server.services.DropUnitEndpoint;
 import net.lisanza.dropunit.server.services.DropUnitEndpointRequest;
 import net.lisanza.dropunit.server.services.DropUnitEndpointResponse;
-import net.lisanza.dropunit.server.services.DropUnitService;
+import net.lisanza.dropunit.server.services.EndpointRegistrationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,9 +35,9 @@ public class DropRegistrationController {
     private static final Logger LOGGER = LoggerFactory.getLogger(DropRegistrationController.class);
 
     private final DropUnitCount dropUnitCount;
-    private final DropUnitService dropUnitService;
+    private final EndpointRegistrationService dropUnitService;
 
-    public DropRegistrationController(DropUnitService dropUnitService,
+    public DropRegistrationController(EndpointRegistrationService dropUnitService,
                                       DropUnitCount dropUnitCount) {
         this.dropUnitService = dropUnitService;
         this.dropUnitCount = dropUnitCount;
@@ -51,7 +51,7 @@ public class DropRegistrationController {
             LOGGER.debug("Called registerEndpoint");
             return new DropUnitRegistrationResponseDto()
                     .withResult("OK")
-                    .withId(dropUnitService.register(new DropUnitEndpoint()
+                    .withId(dropUnitService.registerDynamic(new DropUnitEndpoint()
                             .withUrl(dto.getUrl())
                             .withHeaders(dto.getRequestHeaders())
                             .withMethod(dto.getMethod())

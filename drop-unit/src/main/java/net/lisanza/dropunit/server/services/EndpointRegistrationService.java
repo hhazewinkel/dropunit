@@ -11,22 +11,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class DropUnitService {
+public class EndpointRegistrationService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DropUnitService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EndpointRegistrationService.class);
 
-    private EndpointRegistrations registrations = new EndpointRegistrations();
-    private EndpointRegistrations defaults = new EndpointRegistrations();
+    private EndpointRegistrations dynamicRegistrations = new EndpointRegistrations();
+    private EndpointRegistrations staticRegistrations = new EndpointRegistrations();
     private List<ReceivedRequest> notFound = new ArrayList<>();
 
     // getAll
 
-    public Collection<DropUnitEndpoint> getAllDefaults() {
-        return defaults;
+    public Collection<DropUnitEndpoint> getStaticRegistrations() {
+        return staticRegistrations;
     }
 
-    public Collection<DropUnitEndpoint> getAllRegistrations() {
-        return registrations;
+    public Collection<DropUnitEndpoint> getDynamicRegistrations() {
+        return dynamicRegistrations;
     }
 
     public Collection<ReceivedRequest> getAllNotFound() {
@@ -36,42 +36,42 @@ public class DropUnitService {
     public String dropAll() {
         StringBuilder stringBuilder = new StringBuilder();
         infoLoadedEndpoints(stringBuilder.append("endpoints: "));
-        registrations.clear();
+        dynamicRegistrations.clear();
         notFound.clear();
         infoLoadedEndpoints(stringBuilder.append(" -> after: "));
         return stringBuilder.toString();
     }
 
-    public String registerDefault(DropUnitEndpoint endpoint) {
-        LOGGER.debug("default before {}", defaults.size());
+    public String registerStatic(DropUnitEndpoint endpoint) {
+        LOGGER.debug("default before {}", staticRegistrations.size());
         String dropId = UUID.randomUUID().toString();
         endpoint.setId(dropId);
         LOGGER.debug("register default {} - {}", dropId, endpoint);
-        defaults.add(endpoint);
-        LOGGER.debug("defaults after {}", defaults.size());
+        staticRegistrations.add(endpoint);
+        LOGGER.debug("defaults after {}", staticRegistrations.size());
         return dropId;
     }
 
-    public String register(DropUnitEndpoint endpoint) {
-        LOGGER.debug("registrations before {}", registrations.size());
+    public String registerDynamic(DropUnitEndpoint endpoint) {
+        LOGGER.debug("registrations before {}", dynamicRegistrations.size());
         String dropId = UUID.randomUUID().toString();
         endpoint.setId(dropId);
         LOGGER.debug("register {} - {}", dropId, endpoint);
-        registrations.add(endpoint);
-        LOGGER.debug("registrations after {}", registrations.size());
+        dynamicRegistrations.add(endpoint);
+        LOGGER.debug("registrations after {}", dynamicRegistrations.size());
         return dropId;
     }
 
     public DropUnitEndpoint deregister(String dropId) {
-        LOGGER.debug("registrations before {}", registrations.size());
-        for (DropUnitEndpoint registration: registrations) {
+        LOGGER.debug("registrations before {}", dynamicRegistrations.size());
+        for (DropUnitEndpoint registration: dynamicRegistrations) {
             if ((registration.getId() != null) && (registration.getId().equals(dropId))) {
-                registrations.remove(registration);
-                LOGGER.debug("registrations after {}", registrations.size());
+                dynamicRegistrations.remove(registration);
+                LOGGER.debug("registrations after {}", dynamicRegistrations.size());
                 return registration;
             }
         }
-        LOGGER.debug("registrations after {}", registrations.size());
+        LOGGER.debug("registrations after {}", dynamicRegistrations.size());
         return null;
     }
 
@@ -97,7 +97,7 @@ public class DropUnitService {
         return "OK";
     }
 
-    public List<DropUnitEndpoint> lookupEndpoint(String url, String method) {
+    public List<DropUnitEndpoint> lookupEndpoints(String url, String method) {
         if (url == null) {
             LOGGER.warn("'url' is missing!");
             throw new BadRequestException("'url' is missing!");
@@ -106,18 +106,18 @@ public class DropUnitService {
             LOGGER.warn("'method' is missing!");
             throw new BadRequestException("'method' is missing!");
         }
-        List<DropUnitEndpoint> foundRegistrations = registrations.findByUrlAndMethod(url, method);
+        List<DropUnitEndpoint> foundRegistrations = dynamicRegistrations.findByUrlAndMethod(url, method);
         Collections.sort(foundRegistrations);
         if (0 < foundRegistrations.size()) {
             return foundRegistrations;
         }
-        List<DropUnitEndpoint> foundDefaults = defaults.findByUrlAndMethod(url, method);
+        List<DropUnitEndpoint> foundDefaults = staticRegistrations.findByUrlAndMethod(url, method);
         Collections.sort(foundDefaults);
         return foundDefaults;
     }
 
     public DropUnitEndpoint lookupEndpoint(String dropId) {
-        return registrations.findById(dropId);
+        return dynamicRegistrations.findById(dropId);
     }
 
     public void registerNotFound(ReceivedRequest notFoundRequest) {
@@ -131,8 +131,8 @@ public class DropUnitService {
     // Utils
 
     public StringBuilder infoLoadedEndpoints(StringBuilder stringBuilder) {
-        stringBuilder.append("defaults ").append(defaults.size())
-                .append(" registrations ").append(registrations.size())
+        stringBuilder.append("staticRegistrations ").append(staticRegistrations.size())
+                .append(" dynamicRegistrations ").append(dynamicRegistrations.size())
                 .append(" not found ").append(notFound.size());
         return stringBuilder;
     }

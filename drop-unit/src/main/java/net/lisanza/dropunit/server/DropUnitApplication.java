@@ -14,7 +14,7 @@ import net.lisanza.dropunit.server.rest.dto.DropUnitHeaderDto;
 import net.lisanza.dropunit.server.services.DropUnitCount;
 import net.lisanza.dropunit.server.services.DropUnitEndpoint;
 import net.lisanza.dropunit.server.services.DropUnitEndpointResponse;
-import net.lisanza.dropunit.server.services.DropUnitService;
+import net.lisanza.dropunit.server.services.EndpointRegistrationService;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ public class DropUnitApplication<TypeOfConfiguration extends DropUnitConfigurati
     public void run(TypeOfConfiguration configuration, Environment environment) {
         // Setup dropunit service
         DropUnitCount dropUnitCount = new DropUnitCount();
-        DropUnitService dropUnitService = new DropUnitService();
+        EndpointRegistrationService dropUnitService = new EndpointRegistrationService();
 
         // handle initial endpoints
         initConfig(configuration, dropUnitService);
@@ -58,7 +58,7 @@ public class DropUnitApplication<TypeOfConfiguration extends DropUnitConfigurati
     }
 
     protected void initConfig(TypeOfConfiguration config,
-                              DropUnitService dropUnitService) {
+                              EndpointRegistrationService dropUnitService) {
         if (config.getEndpoints() != null) {
             for (EndpointDocument endpointDocument : config.getEndpoints()) {
                 configEndpoint(endpointDocument, dropUnitService);
@@ -68,7 +68,7 @@ public class DropUnitApplication<TypeOfConfiguration extends DropUnitConfigurati
     }
 
     private void configEndpoint(EndpointDocument endpointDocument,
-                                DropUnitService dropUnitService) {
+                                EndpointRegistrationService dropUnitService) {
         try {
             DropUnitEndpointResponse response = new DropUnitEndpointResponse()
                     .withCode(endpointDocument.getResponseCode())
@@ -79,7 +79,7 @@ public class DropUnitApplication<TypeOfConfiguration extends DropUnitConfigurati
                 response.withBody(readFromFile(endpointDocument.getResponseBodyFileName()));
             }
             LOGGER.debug("response: {}", response);
-            dropUnitService.registerDefault(new DropUnitEndpoint()
+            dropUnitService.registerStatic(new DropUnitEndpoint()
                     .withUrl(endpointDocument.getPath())
                     .withMethod(endpointDocument.getMethod())
                     .withHeaders(toListOfHeaderDto(endpointDocument.getHeaders()))

@@ -5,7 +5,7 @@ import net.lisanza.dropunit.server.rest.dto.DropUnitRegistrationResponseDto;
 import net.lisanza.dropunit.server.rest.dto.ReceivedRequestDto;
 import net.lisanza.dropunit.server.services.DropUnitCount;
 import net.lisanza.dropunit.server.services.DropUnitEndpoint;
-import net.lisanza.dropunit.server.services.DropUnitService;
+import net.lisanza.dropunit.server.services.EndpointRegistrationService;
 import net.lisanza.dropunit.server.services.data.ReceivedRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,9 +37,9 @@ public class DropAssertionController {
     private static final Logger LOGGER = LoggerFactory.getLogger(DropAssertionController.class);
 
     private final DropUnitCount dropUnitCount;
-    private final DropUnitService dropUnitService;
+    private final EndpointRegistrationService dropUnitService;
 
-    public DropAssertionController(DropUnitService dropUnitService,
+    public DropAssertionController(EndpointRegistrationService dropUnitService,
                                    DropUnitCount dropUnitCount) {
         this.dropUnitService = dropUnitService;
         this.dropUnitCount = dropUnitCount;
@@ -57,7 +57,7 @@ public class DropAssertionController {
     public Collection<DropUnitEndpoint> getAllDrop() {
         try {
             LOGGER.debug("Called getAllDrop");
-            return dropUnitService.getAllRegistrations();
+            return dropUnitService.getDynamicRegistrations();
         } catch (Exception e) {
             LOGGER.warn("Failure generating response getAllDrop", e);
         }
