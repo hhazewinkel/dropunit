@@ -14,6 +14,7 @@ import net.lisanza.dropunit.server.rest.dto.DropUnitHeaderDto;
 import net.lisanza.dropunit.server.services.DropUnitCount;
 import net.lisanza.dropunit.server.services.DropUnitEndpoint;
 import net.lisanza.dropunit.server.services.DropUnitEndpointResponse;
+import net.lisanza.dropunit.server.services.EndpointLookupService;
 import net.lisanza.dropunit.server.services.EndpointRegistrationService;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.slf4j.Logger;
@@ -35,10 +36,11 @@ public class DropUnitApplication<TypeOfConfiguration extends DropUnitConfigurati
     public void run(TypeOfConfiguration configuration, Environment environment) {
         // Setup dropunit service
         DropUnitCount dropUnitCount = new DropUnitCount();
-        EndpointRegistrationService dropUnitService = new EndpointRegistrationService();
+        EndpointRegistrationService registrationService = new EndpointRegistrationService();
+        EndpointLookupService lookupService = new EndpointLookupService(registrationService);
 
         // handle initial endpoints
-        initConfig(configuration, dropUnitService);
+        initConfig(configuration, registrationService);
 
         // Registration of the handlers / mappings
         environment.jersey().register(new ExceptionHandler());
@@ -49,9 +51,9 @@ public class DropUnitApplication<TypeOfConfiguration extends DropUnitConfigurati
                 LoggingFeature.Verbosity.PAYLOAD_ANY));
 
         // Registration of the REST controllers
-        environment.jersey().register(new DropUnitController(dropUnitService, dropUnitCount));
-        environment.jersey().register(new DropRegistrationController(dropUnitService, dropUnitCount));
-        environment.jersey().register(new DropAssertionController(dropUnitService, dropUnitCount));
+        environment.jersey().register(new DropUnitController(registrationService, lookupService, dropUnitCount));
+        environment.jersey().register(new DropRegistrationController(registrationService, dropUnitCount));
+        environment.jersey().register(new DropAssertionController(registrationService, dropUnitCount));
 
         // Registration of the required Dropwizard health checks
         environment.healthChecks().register("HEALTH", new HealthCheckService());

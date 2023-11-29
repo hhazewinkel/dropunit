@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.BadRequestException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -95,25 +94,6 @@ public class EndpointRegistrationService {
         endpoint.getResponse().setContentType(response.getContentType());
         endpoint.getResponse().setBody(response.getBody());
         return "OK";
-    }
-
-    public List<DropUnitEndpoint> lookupEndpoints(String url, String method) {
-        if (url == null) {
-            LOGGER.warn("'url' is missing!");
-            throw new BadRequestException("'url' is missing!");
-        }
-        if (method == null) {
-            LOGGER.warn("'method' is missing!");
-            throw new BadRequestException("'method' is missing!");
-        }
-        List<DropUnitEndpoint> foundRegistrations = dynamicRegistrations.findByUrlAndMethod(url, method);
-        Collections.sort(foundRegistrations);
-        if (0 < foundRegistrations.size()) {
-            return foundRegistrations;
-        }
-        List<DropUnitEndpoint> foundDefaults = staticRegistrations.findByUrlAndMethod(url, method);
-        Collections.sort(foundDefaults);
-        return foundDefaults;
     }
 
     public DropUnitEndpoint lookupEndpoint(String dropId) {

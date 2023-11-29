@@ -3,17 +3,16 @@ package net.lisanza.dropunit.server.rest.controlers;
 import net.lisanza.dropunit.server.rest.constants.RequestMappings;
 import net.lisanza.dropunit.server.services.DropUnitCount;
 import net.lisanza.dropunit.server.services.DropUnitEndpoint;
+import net.lisanza.dropunit.server.services.EndpointLookupService;
 import net.lisanza.dropunit.server.services.EndpointRegistrationService;
 import net.lisanza.dropunit.server.services.data.ReceivedRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.ValidationException;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -27,12 +26,14 @@ public class DropUnitController {
     private static final Logger LOGGER = LoggerFactory.getLogger(DropUnitController.class);
 
     private final DropUnitCount dropUnitCount;
-    private final EndpointRegistrationService dropUnitService;
-    private final EndpointValidator validator = new EndpointValidator();
+    private final EndpointRegistrationService registrationService;
+    private final EndpointLookupService lookupService;
 
-    public DropUnitController(EndpointRegistrationService dropUnitService,
+    public DropUnitController(EndpointRegistrationService registrationService,
+                              EndpointLookupService lookupService,
                               DropUnitCount dropUnitCount) {
-        this.dropUnitService = dropUnitService;
+        this.registrationService = registrationService;
+        this.lookupService = lookupService;
         this.dropUnitCount = dropUnitCount;
     }
 
@@ -96,24 +97,11 @@ public class DropUnitController {
             LOGGER.warn("'received request' is missing!");
             throw new BadRequestException("'received request' is missing!");
         }
-        for (DropUnitEndpoint endpoint : dropUnitService.lookupEndpoints(receivedRequest.getUrl(), receivedRequest.getMethod())) {
-            try {
-                // validate if this is the request endpoint to be used
-                validator.validate(endpoint, receivedRequest);
-                // request received
-                endpoint.addReceived(receivedRequest);
-                LOGGER.debug(endpoint.requestInfoString());
-                // Response build up
-                return generateResponse(endpoint);
-            } catch (ValidationException e) {
-                LOGGER.debug("{}\n{}\n{}", e.getMessage(),
-                        endpoint.requestInfoString(),
-                        receivedRequest.getBody());
-            }
-        }
-        LOGGER.warn("missing registration: {}", receivedRequest);
-        dropUnitService.registerNotFound(receivedRequest);
-        throw new NotFoundException("missing registration: " + receivedRequest.getUrl());
+
+        DropUnitEndpoint endpoint = lookupService.lookupEndpoint(receivedRequest);
+        LOGGER.debug(endpoint.requestInfoString());
+        // Response build up
+        return generateResponse(endpoint);
     }
 
     private Response generateResponse(DropUnitEndpoint endpoint) {

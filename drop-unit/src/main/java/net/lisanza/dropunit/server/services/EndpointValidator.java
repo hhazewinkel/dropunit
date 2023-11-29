@@ -1,7 +1,5 @@
-package net.lisanza.dropunit.server.rest.controlers;
+package net.lisanza.dropunit.server.services;
 
-import net.lisanza.dropunit.server.services.DropUnitEndpoint;
-import net.lisanza.dropunit.server.services.DropUnitEndpointRequest;
 import net.lisanza.dropunit.server.services.data.ReceivedRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +9,7 @@ import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
-class EndpointValidator {
+public class EndpointValidator {
     private static final Logger LOGGER = LoggerFactory.getLogger(EndpointValidator.class);
 
     protected void validate(DropUnitEndpoint endpoint, ReceivedRequest receivedRequest) {

@@ -1,4 +1,4 @@
-package net.lisanza.dropunit.server.rest.controlers;
+package net.lisanza.dropunit.server.services;
 
 import org.junit.Before;
 import org.junit.Test;
