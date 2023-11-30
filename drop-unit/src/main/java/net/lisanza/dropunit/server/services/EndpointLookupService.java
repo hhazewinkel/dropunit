@@ -12,9 +12,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 public class EndpointLookupService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EndpointRegistrationService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EndpointLookupService.class);
 
     private EndpointRegistrationService registrationService;
     private final EndpointValidator validator = new EndpointValidator();
@@ -24,6 +26,7 @@ public class EndpointLookupService {
     }
 
     public DropUnitEndpoint lookupEndpoint(ReceivedRequest receivedRequest) {
+        checkReceivedEndpoint(receivedRequest);
         for (DropUnitEndpoint endpoint : lookupEndpoints(receivedRequest.getUrl(), receivedRequest.getMethod())) {
             try {
                 // validate if this is the request endpoint to be used
@@ -44,25 +47,34 @@ public class EndpointLookupService {
         throw new NotFoundException("missing registration: " + receivedRequest.getUrl());
     }
 
-    public List<DropUnitEndpoint> lookupEndpoints(String url, String method) {
-        if (url == null) {
+    private void checkReceivedEndpoint(ReceivedRequest receivedRequest) {
+        if (receivedRequest == null) {
+            LOGGER.warn("'receivedRequest' is missing!");
+            throw new BadRequestException("'receivedRequest' is missing!");
+        }
+        if (isEmpty(receivedRequest.getUrl())) {
             LOGGER.warn("'url' is missing!");
             throw new BadRequestException("'url' is missing!");
         }
-        if (method == null) {
+        if (isEmpty(receivedRequest.getMethod())) {
             LOGGER.warn("'method' is missing!");
             throw new BadRequestException("'method' is missing!");
         }
-        List<DropUnitEndpoint> foundRegistrations = findByUrlAndMethod(url, method,
+    }
+
+    public List<DropUnitEndpoint> lookupEndpoints(String url, String method) {
+        List<DropUnitEndpoint> dynamicRegistrations = findByUrlAndMethod(url, method,
                 registrationService.getDynamicRegistrations());
-        Collections.sort(foundRegistrations);
-        if (0 < foundRegistrations.size()) {
-            return foundRegistrations;
+        Collections.sort(dynamicRegistrations);
+        if (0 < dynamicRegistrations.size()) {
+            LOGGER.info("found {} dynamic registrations", dynamicRegistrations.size());
+            return dynamicRegistrations;
         }
-        List<DropUnitEndpoint> foundDefaults = findByUrlAndMethod(url, method,
+        List<DropUnitEndpoint> staticRegistrations = findByUrlAndMethod(url, method,
                 registrationService.getStaticRegistrations());
-        Collections.sort(foundDefaults);
-        return foundDefaults;
+        Collections.sort(staticRegistrations);
+        LOGGER.info("found {} static registrations", staticRegistrations.size());
+        return staticRegistrations;
     }
 
     public List<DropUnitEndpoint> findByUrlAndMethod(String url, String method, Collection<DropUnitEndpoint> endpoints) {

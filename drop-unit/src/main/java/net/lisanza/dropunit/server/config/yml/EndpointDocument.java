@@ -1,6 +1,7 @@
 package net.lisanza.dropunit.server.config.yml;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import net.lisanza.dropunit.server.rest.dto.DropUnitParametersDto;
 import net.lisanza.dropunit.server.services.DropUnitEndpointRequest;
 
 import javax.validation.constraints.NotNull;
@@ -21,6 +22,11 @@ public class EndpointDocument {
      */
     @NotNull
     private String method;
+
+    /**
+     * The headers on which this endpoint will react.
+     */
+    private DropUnitParametersDto parameters;
 
     /**
      * The headers on which this endpoint will react.
@@ -77,6 +83,15 @@ public class EndpointDocument {
     @JsonProperty
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    @JsonProperty
+    public DropUnitParametersDto getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(DropUnitParametersDto parameters) {
+        this.parameters = parameters;
     }
 
     @JsonProperty

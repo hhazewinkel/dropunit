@@ -10,6 +10,9 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
 public class DropUnitEndpoint implements Comparable<DropUnitEndpoint> {
 
     private String id;
@@ -134,10 +137,17 @@ public class DropUnitEndpoint implements Comparable<DropUnitEndpoint> {
     }
 
     public DropUnitEndpoint withUrl(String url) {
-        if (url.startsWith("/")) {
-            this.url = url;
-        } else {
-            this.url = "/" + url;
+        if (!isEmpty(url)) {
+            int q = url.lastIndexOf('?');
+            if (q != -1) {
+                this.url = url.substring(0, q);
+                withParameters(url.substring(q + 1));
+            } else {
+                this.url = url;
+            }
+        }
+        if (!this.url.startsWith("/")) {
+            this.url = "/" + this.url;
         }
         return this;
     }
@@ -148,9 +158,10 @@ public class DropUnitEndpoint implements Comparable<DropUnitEndpoint> {
     }
 
     public DropUnitEndpoint withParameters(DropUnitParametersDto dto) {
-        this.parameters = new EndPointParameters();
+        if (parameters == null) {
+            parameters = new EndPointParameters();
+        }
         if (dto != null) {
-            parameters.setMatchAll(dto.isMatchAll());
             parameters.setMatchAll(dto.isMatchAll());
             parameters.setMatchValue(dto.isMatchValue());
             for (String key : dto.getIncludedParameters().keySet()) {
@@ -159,6 +170,16 @@ public class DropUnitEndpoint implements Comparable<DropUnitEndpoint> {
             for (String key : dto.getExcludedParameters().keySet()) {
                 parameters.withoutParameter(key, dto.getExcludedParameters().get(key));
             }
+        }
+        return this;
+    }
+
+    public DropUnitEndpoint withParameters(String queryString) {
+        if (isNotEmpty(queryString)) {
+            if (parameters == null) {
+                parameters = new EndPointParameters();
+            }
+            parameters.withParameterString(queryString);
         }
         return this;
     }

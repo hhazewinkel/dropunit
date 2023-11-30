@@ -84,6 +84,7 @@ public class DropUnitApplication<TypeOfConfiguration extends DropUnitConfigurati
             dropUnitService.registerStatic(new DropUnitEndpoint()
                     .withUrl(endpointDocument.getPath())
                     .withMethod(endpointDocument.getMethod())
+                    .withParameters(endpointDocument.getParameters())
                     .withHeaders(toListOfHeaderDto(endpointDocument.getHeaders()))
                     .withDelay(endpointDocument.getDelay())
                     .withRequest(endpointDocument.getRequest())

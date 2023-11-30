@@ -92,3 +92,31 @@ endpoints:
       Location: "https://this.domain.local/returned"
     responseContentType: "application/json"
     responseBodyFileName: ""
+  - path: "/static/path/and/parameters/test1"
+    method: "GET"
+    parameters:
+      matchAll: false
+      matchValue: false
+    responseCode: 200
+    responseContentType: "application/xml"
+    responseBodyFileName: "src/main/resources/endpoints/response-body-one.xml"
+  - path: "/static/path/and/parameters/test2"
+    method: "GET"
+    parameters:
+      matchAll: false
+      matchValue: false
+      included:
+        "key": "value"
+    responseCode: 200
+    responseContentType: "application/xml"
+    responseBodyFileName: "src/main/resources/endpoints/response-body-one.xml"
+  - path: "/static/path/and/parameters/test3"
+    method: "GET"
+    parameters:
+      matchAll: false
+      matchValue: false
+      excluded:
+        "key": "value"
+    responseCode: 200
+    responseContentType: "application/xml"
+    responseBodyFileName: "src/main/resources/endpoints/response-body-one.xml"

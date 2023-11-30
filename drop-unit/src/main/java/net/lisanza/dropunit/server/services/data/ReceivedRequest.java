@@ -2,20 +2,15 @@ package net.lisanza.dropunit.server.services.data;
 
 import net.lisanza.dropunit.server.rest.dto.DropUnitHeaderDto;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class ReceivedRequest {
 
     private String path;
 
     private String queryString;
-
-    private ArrayList<String> receivedParameterAndValues = new ArrayList<>();
 
     private String method;
 
@@ -31,10 +26,6 @@ public class ReceivedRequest {
 
     public String getQueryString() {
         return queryString;
-    }
-
-    public ArrayList<String> getParameterAndValues() {
-        return receivedParameterAndValues;
     }
 
     public String getMethod() {
@@ -66,12 +57,6 @@ public class ReceivedRequest {
 
     public ReceivedRequest withQueryString(String queryString) {
         this.queryString = queryString;
-        if (isNotEmpty(queryString)) {
-            // split into parameters (key / value cobinations)
-            for (String pair : queryString.split("&")) {
-                receivedParameterAndValues.add(pair);
-            }
-        }
         return this;
     }
 
@@ -100,9 +85,6 @@ public class ReceivedRequest {
             url.append('/');
         }
         url.append(path);
-        if (isNotEmpty(queryString)) {
-            url.append('?').append(queryString);
-        }
         return url.toString();
     }
 
