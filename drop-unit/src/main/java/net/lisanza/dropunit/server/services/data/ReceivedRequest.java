@@ -6,8 +6,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-
 public class ReceivedRequest {
 
     private String path;
@@ -87,9 +85,6 @@ public class ReceivedRequest {
             url.append('/');
         }
         url.append(path);
-        if (isNotEmpty(queryString)) {
-            url.append('?').append(queryString);
-        }
         return url.toString();
     }
 
@@ -105,5 +100,31 @@ public class ReceivedRequest {
                 .append(", headers=").append(headers)
                 .append(", body=").append(body)
                 .append('}').toString();
+    }
+
+    public static class ReceivedParameter {
+        private String key;
+        private String value;
+
+        public ReceivedParameter(String key, String value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
     }
 }

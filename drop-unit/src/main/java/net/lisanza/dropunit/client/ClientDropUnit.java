@@ -2,6 +2,7 @@ package net.lisanza.dropunit.client;
 
 import net.lisanza.dropunit.server.rest.dto.DropUnitEndpointDto;
 import net.lisanza.dropunit.server.rest.dto.DropUnitHeaderDto;
+import net.lisanza.dropunit.server.rest.dto.DropUnitParametersDto;
 import net.lisanza.dropunit.server.rest.dto.DropUnitRequestDto;
 import net.lisanza.dropunit.server.rest.dto.DropUnitRequestPatternsDto;
 import net.lisanza.dropunit.server.rest.dto.DropUnitResponseDto;
@@ -134,6 +135,77 @@ public class ClientDropUnit extends BaseDropUnitClient {
         this.dropUnitEndpointDto.setUrl(uri);
         this.dropUnitEndpointDto.setMethod(method);
         return this;
+    }
+
+    /**
+     * Matching request parameter only in order
+     * @return The client-drop-unit.
+     * @throws CannotProceedException when the endpoint is not defined.
+     */
+    public ClientDropUnit withQueryParameterMatch(boolean matchAll, boolean matchValue)
+            throws CannotProceedException {
+        checkDropUnitEndpoint();
+        checkRequestParameter();
+        this.dropUnitEndpointDto.getRequestParameters()
+                .withMatchAll(matchAll)
+                .withMatchValue(matchValue);
+        return this;
+    }
+
+    /**
+     * Adding request parameter definition
+     * @param key
+     * @param value
+     * @return The client-drop-unit.
+     * @throws CannotProceedException when the endpoint is not defined.
+     */
+    public ClientDropUnit withQueryParameter(final String key, final String value)
+            throws CannotProceedException {
+        checkDropUnitEndpoint();
+        checkRequestParameter();
+        this.dropUnitEndpointDto.getRequestParameters()
+                .withParameter(key, value);
+        return this;
+    }
+
+    /**
+     * Adding request parameter definition from query string
+     * @param queryString
+     * @return The client-drop-unit.
+     * @throws CannotProceedException when the endpoint is not defined.
+     */
+    public ClientDropUnit withQueryParameters(final String queryString)
+            throws CannotProceedException {
+        checkDropUnitEndpoint();
+        checkRequestParameter();
+        this.dropUnitEndpointDto.getRequestParameters()
+                .withParameterString(queryString);
+        return this;
+    }
+
+    /**
+     * Adding query parameter definition that must be excluded (may not exist)
+     * @param key
+     * @param value
+     * @return The client-drop-unit.
+     * @throws CannotProceedException when the endpoint is not defined.
+     */
+    public ClientDropUnit withoutQueryParameter(final String key, final String value)
+            throws CannotProceedException {
+        checkDropUnitEndpoint();
+        checkRequestParameter();
+        this.dropUnitEndpointDto.getRequestParameters()
+                .withoutParameter(key, value);
+        return this;
+    }
+
+    /**
+     * Checking RequestParameter object in dropUnitEndpointDto
+     */
+    private void checkRequestParameter() {
+        if (this.dropUnitEndpointDto.getRequestParameters() == null) {
+            this.dropUnitEndpointDto.setRequestParameters(new DropUnitParametersDto());
+        }
     }
 
     /**
@@ -365,7 +437,6 @@ public class ClientDropUnit extends BaseDropUnitClient {
         }
     }
 
-    /**
     // Remote operations
 
     /**

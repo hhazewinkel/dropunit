@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
 public class DropUnitEndpointDto {
 
     @JsonProperty("url")
@@ -12,6 +14,9 @@ public class DropUnitEndpointDto {
 
     @JsonProperty("method")
     private String method;
+
+    @JsonProperty("requestParameters")
+    private DropUnitParametersDto requestParameters;
 
     @JsonProperty("requestHeaders")
     private List<DropUnitHeaderDto> requestHeaders = new ArrayList();
@@ -30,6 +35,9 @@ public class DropUnitEndpointDto {
     }
 
     public void setUrl(String url) {
+        if (isNotEmpty(url)) {
+            String[] uriParts = url.split("\\?", 2);
+        }
         this.url = url;
     }
 
@@ -39,6 +47,14 @@ public class DropUnitEndpointDto {
 
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    public DropUnitParametersDto getRequestParameters() {
+        return requestParameters;
+    }
+
+    public void setRequestParameters(DropUnitParametersDto requestParameters) {
+        this.requestParameters = requestParameters;
     }
 
     public List<DropUnitHeaderDto> getRequestHeaders() {

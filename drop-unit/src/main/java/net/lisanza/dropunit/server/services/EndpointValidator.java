@@ -15,6 +15,7 @@ public class EndpointValidator {
     protected void validate(DropUnitEndpoint endpoint, ReceivedRequest receivedRequest) {
         // validate
         validateRequestHeaders(endpoint, receivedRequest.getHeaders());
+        validateRequestParameters(endpoint.getParameters(), receivedRequest.getQueryString());
         if (endpoint.getRequest() != null) {
             validateRequestContentType(endpoint.getRequest().getContentType(), receivedRequest.getContentType());
             validateRequestContent(endpoint.getRequest(), receivedRequest.getBody());
@@ -39,6 +40,18 @@ public class EndpointValidator {
             return;
         }
         throw new ValidationException("header: '" + name + "' : '" + endpointValue + "' != request '" + requestValue + "'");
+    }
+
+    protected void validateRequestParameters(EndPointParameters parameters, String requestQueryString) {
+        LOGGER.debug("validateRequestParameters");
+        if (parameters == null) {
+            return;
+        }
+        EndPointParameters.EndPointParameterComparison result  = parameters.doesMatch(requestQueryString);
+        if (result.equals(EndPointParameters.EndPointParameterComparison.MATCH_OK)) {
+            return;
+        }
+        throw new ValidationException("parameters failed: '" + result.name() + "'");
     }
 
     protected void validateRequestContentType(String endpointContentType, String requestContentType) {

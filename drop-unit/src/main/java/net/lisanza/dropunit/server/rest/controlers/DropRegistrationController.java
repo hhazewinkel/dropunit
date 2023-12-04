@@ -53,6 +53,7 @@ public class DropRegistrationController {
                     .withResult("OK")
                     .withId(dropUnitService.registerDynamic(new DropUnitEndpoint()
                             .withUrl(dto.getUrl())
+                            .withParameters(dto.getRequestParameters())
                             .withHeaders(dto.getRequestHeaders())
                             .withMethod(dto.getMethod())
                             .withResponse(new DropUnitEndpointResponse()
